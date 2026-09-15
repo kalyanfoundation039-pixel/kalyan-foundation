@@ -1154,6 +1154,41 @@ body {
   color: var(--text-muted);
 }
 
+.dev-credit {
+  margin-top: 10px;
+  font-size: 0.74rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.dev-credit:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.dev-credit span {
+  color: var(--text-muted);
+}
+
+.dev-credit .dev-name {
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+[data-theme="dark"] .dev-credit .dev-name {
+  color: var(--primary-light);
+}
+
 /* Sticky Bottom Action Dock (Mobile Experience) */
 .bottom-dock {
   position: fixed;
