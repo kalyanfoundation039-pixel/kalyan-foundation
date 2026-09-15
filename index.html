@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KALYAN FOUNDATION | End Is Beginning - NFC Smart Digital Card</title>
+    
+    <!-- Meta SEO & OpenGraph -->
+    <meta name="description" content="Kalyan Foundation (Bavla) - Social Service Activity, Education Support, Free Health Camps, Tree Plantation and Community Welfare. End Is Beginning.">
+    <meta name="keywords" content="Kalyan Foundation, NGO Bavla, Social Service Bavla, Donation, Education Help, Health Camps, End is Beginning">
+    <meta name="author" content="Kalyan Foundation">
+    <meta name="theme-color" content="#15803d">
+    
+    <!-- OpenGraph Social Preview -->
+    <meta property="og:title" content="Kalyan Foundation | End Is Beginning">
+    <meta property="og:description" content="Social Service Activity, Education, Health, Environment & Community Welfare in Bavla. Connect with us!">
+    <meta property="og:image" content="assets/logo.jpg">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Main Mobile-First Application Container -->
+    <main class="app-container" id="mainApp">
+        
+        <!-- Top Sticky Header Navigation -->
+        <header class="top-nav">
+            <div class="brand-mini">
+                <img src="assets/logo.jpg" alt="Kalyan Foundation Emblem" class="brand-mini-logo">
+                <span class="brand-mini-text" data-i18n="orgName">Kalyan Foundation</span>
+            </div>
+            
+            <div class="header-controls">
+                <!-- Multilingual Switcher -->
+                <div class="lang-switcher">
+                    <button type="button" class="lang-btn active" data-lang="en">EN</button>
+                    <button type="button" class="lang-btn" data-lang="gu">ગુજ</button>
+                    <button type="button" class="lang-btn" data-lang="hi">हि</button>
+                </div>
+                
+                <!-- Dark / Light Theme Toggle -->
+                <button type="button" class="icon-btn" id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <!-- QR Code Modal Button -->
+                <button type="button" class="icon-btn" id="openQrModalBtn" title="Show QR Code" aria-label="Show QR Code">
+                    <i class="fas fa-qrcode"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Identity Profile Section -->
+        <section class="hero-card">
+            <div class="hero-badge-wrapper">
+                <div class="verified-pill">
+                    <i class="fas fa-check-circle"></i>
+                    <span data-i18n="verifiedBadge">Verified NGO</span>
+                </div>
+            </div>
+            
+            <div class="logo-avatar-container">
+                <div class="logo-halo"></div>
+                <img src="assets/logo.jpg" alt="Kalyan Foundation Official Logo" class="logo-avatar">
+            </div>
+            
+            <h1 class="org-name" data-i18n="orgName">KALYAN FOUNDATION</h1>
+            <div class="org-tagline" data-i18n="tagline">END IS BEGINNING</div>
+            <p class="org-category" data-i18n="category">SOCIAL SERVICE ACTIVITY • NON-PROFIT NGO</p>
+            
+            <div>
+                <span class="org-location-pill">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span data-i18n="addressShort">Bordipa, Nr. Ramjimandir, Bavla - 382220</span>
+                </span>
+            </div>
+        </section>
+
+        <!-- 6 Direct Action Tiles Grid -->
+        <section class="actions-grid">
+            <a href="tel:+919909739390" class="action-tile tile-call" title="Call Kalyan Foundation">
+                <div class="action-tile-icon"><i class="fas fa-phone-alt"></i></div>
+                <span class="action-tile-label" data-i18n="callBtn">Call Us</span>
+            </a>
+            
+            <a href="https://wa.me/919909739390?text=Namaste%20Kalyan%20Foundation,%20I%20would%20like%20to%20know%20more%20about%20your%20social%20service%20activities." target="_blank" class="action-tile tile-wa" title="WhatsApp Chat">
+                <div class="action-tile-icon"><i class="fab fa-whatsapp"></i></div>
+                <span class="action-tile-label" data-i18n="whatsappBtn">WhatsApp</span>
+            </a>
+            
+            <button type="button" class="action-tile tile-vcard save-contact-btn" title="Save Contact to Phone">
+                <div class="action-tile-icon"><i class="fas fa-address-card"></i></div>
+                <span class="action-tile-label" data-i18n="saveContactBtn">Save Contact</span>
+            </button>
+            
+            <a href="https://www.google.com/maps/search/?api=1&query=Bordipa+Nr+Ramjimandir+Bavla+382220" target="_blank" class="action-tile tile-map" title="Google Maps Location">
+                <div class="action-tile-icon"><i class="fas fa-directions"></i></div>
+                <span class="action-tile-label" data-i18n="directionsBtn">Directions</span>
+            </a>
+            
+            <a href="mailto:kalyanfoundation039@gmail.com?subject=Inquiry%20for%20Kalyan%20Foundation" class="action-tile tile-mail" title="Send Email">
+                <div class="action-tile-icon"><i class="fas fa-envelope"></i></div>
+                <span class="action-tile-label" data-i18n="emailBtn">Email</span>
+            </a>
+            
+            <button type="button" class="action-tile tile-share share-profile-btn" title="Share Digital Card">
+                <div class="action-tile-icon"><i class="fas fa-share-alt"></i></div>
+                <span class="action-tile-label" data-i18n="shareBtn">Share Card</span>
+            </button>
+        </section>
+
+        <!-- Big Highlighted Save Contact Action -->
+        <div class="highlight-save-dock">
+            <button type="button" class="btn-save-contact-big save-contact-btn">
+                <i class="fas fa-user-plus"></i>
+                <span data-i18n="saveContactBtn">Add Kalyan Foundation to Contacts</span>
+            </button>
+        </div>
+
+        <!-- Impact Numbers Strip -->
+        <section class="stats-strip">
+            <div class="stats-title-small" data-i18n="impactHeading">OUR IMPACT AT A GLANCE</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="50000" data-suffix="+">50,000+</div>
+                    <div class="stat-label" data-i18n="statLives">Lives Impacted</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="120" data-suffix="+">120+</div>
+                    <div class="stat-label" data-i18n="statProjects">Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="1500" data-suffix="+">1,500+</div>
+                    <div class="stat-label" data-i18n="statVolunteers">Volunteers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="25" data-suffix="+">25+</div>
+                    <div class="stat-label" data-i18n="statYears">Years Service</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Initiatives & Causes (Interactive WhatsApp Routing) -->
+        <section class="content-section" id="initiativesSection">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span data-i18n="initiativesTitle">Key Initiatives & Causes</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="initiativesSubtitle">Tap any initiative to support or inquire directly on WhatsApp</p>
+            </div>
+
+            <div class="initiatives-list">
+                <!-- 1. Social Welfare -->
+                <div class="initiative-card init-social" data-cause="social">
+                    <div class="init-card-top">
+                        <div class="init-icon-box">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="init-content">
+                            <h3 class="init-title" data-i18n="initSocialTitle">Social Welfare</h3>
+                            <p class="init-desc" data-i18n="initSocialDesc">Working for the upliftment, food security, and dignified living of underprivileged communities.</p>
+                        </div>
+                    </div>
+                    <div class="init-action-dock">
+                        <button type="button" class="support-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            <span data-i18n="supportCauseBtn">Support via WhatsApp</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Education -->
+                <div class="initiative-card init-edu" data-cause="education">
+                    <div class="init-card-top">
+                        <div class="init-icon-box">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="init-content">
+                            <h3 class="init-title" data-i18n="initEduTitle">Education Support</h3>
+                            <p class="init-desc" data-i18n="initEduDesc">Providing quality education, books, stationery, and scholarships for a brighter tomorrow.</p>
+                        </div>
+                    </div>
+                    <div class="init-action-dock">
+                        <button type="button" class="support-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            <span data-i18n="supportCauseBtn">Support via WhatsApp</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Health -->
+                <div class="initiative-card init-health" data-cause="health">
+                    <div class="init-card-top">
+                        <div class="init-icon-box">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="init-content">
+                            <h3 class="init-title" data-i18n="initHealthTitle">Health & Medical</h3>
+                            <p class="init-desc" data-i18n="initHealthDesc">Organizing free medical checkup camps, health awareness, and medicine assistance.</p>
+                        </div>
+                    </div>
+                    <div class="init-action-dock">
+                        <button type="button" class="support-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            <span data-i18n="supportCauseBtn">Support via WhatsApp</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Environment -->
+                <div class="initiative-card init-env" data-cause="environment">
+                    <div class="init-card-top">
+                        <div class="init-icon-box">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="init-content">
+                            <h3 class="init-title" data-i18n="initEnvTitle">Environment & Trees</h3>
+                            <p class="init-desc" data-i18n="initEnvDesc">Tree plantation drives, environmental awareness, and promoting clean & green living.</p>
+                        </div>
+                    </div>
+                    <div class="init-action-dock">
+                        <button type="button" class="support-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            <span data-i18n="supportCauseBtn">Support via WhatsApp</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Multi Purpose -->
+                <div class="initiative-card init-multi" data-cause="multipurpose">
+                    <div class="init-card-top">
+                        <div class="init-icon-box">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="init-content">
+                            <h3 class="init-title" data-i18n="initMultiTitle">Multi-Purpose Aid</h3>
+                            <p class="init-desc" data-i18n="initMultiDesc">Holistic community development, crisis relief, and women empowerment initiatives.</p>
+                        </div>
+                    </div>
+                    <div class="init-action-dock">
+                        <button type="button" class="support-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            <span data-i18n="supportCauseBtn">Support via WhatsApp</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Donation Calculator Widget -->
+        <section class="content-section" id="donationSection">
+            <div class="donation-card">
+                <div class="donation-banner-text">
+                    <h3 data-i18n="quickDonateHeading">Your Small Help Makes A Big Difference</h3>
+                    <p data-i18n="quickDonateSub">Every contribution brings hope, empowers lives, and builds a better tomorrow.</p>
+                </div>
+
+                <!-- Manual Amount Input Box -->
+                <div class="amount-selector-title" data-i18n="selectAmount">Enter Donation Amount (₹)</div>
+                
+                <div class="manual-amount-input-wrap">
+                    <div class="manual-amount-box">
+                        <span class="currency-symbol">₹</span>
+                        <input type="number" id="manualAmountInput" class="manual-amount-input" placeholder="1000" min="1" step="100" value="1000">
+                        <span class="currency-code">INR</span>
+                    </div>
+                </div>
+
+                <!-- Quick Preset Amount Chips -->
+                <div class="preset-chips-title" data-i18n="presetChipsLabel">Or select quick amount:</div>
+                <div class="amount-chips">
+                    <div class="amount-chip" data-amount="250">₹250</div>
+                    <div class="amount-chip" data-amount="500">₹500</div>
+                    <div class="amount-chip active" data-amount="1000">₹1,000</div>
+                    <div class="amount-chip" data-amount="2500">₹2,500</div>
+                    <div class="amount-chip" data-amount="5000">₹5,000</div>
+                    <div class="amount-chip" data-amount="10000">₹10,000</div>
+                </div>
+
+                <div class="purpose-select-wrap">
+                    <label class="purpose-label" data-i18n="selectPurpose">Select Cause / Purpose</label>
+                    <select id="donationPurpose" class="purpose-select">
+                        <option value="general" data-i18n="purposeGeneral">General NGO Donation (Where Most Needed)</option>
+                        <option value="welfare" data-i18n="purposeWelfare">Food & Social Welfare Support (અન્નદાન & સામાજિક સેવા)</option>
+                        <option value="education" data-i18n="purposeEducation">Child Education & Books Support (શિક્ષણ સહાય)</option>
+                        <option value="health" data-i18n="purposeHealth">Free Medical & Health Camps (આરોગ્ય કેમ્પ)</option>
+                        <option value="environment" data-i18n="purposeEnvironment">Tree Plantation & Nature Care (વૃક્ષારોપણ)</option>
+                    </select>
+                </div>
+
+                <div class="donate-buttons-stack">
+                    <button type="button" id="donateWhatsAppBtn" class="btn-donate-wa">
+                        <i class="fab fa-whatsapp"></i>
+                        <span id="donateBtnLabel" data-i18n="donateWhatsAppBtn">Donate via WhatsApp</span>
+                    </button>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges-grid">
+                    <div class="trust-badge-item">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div class="trust-badge-text">
+                            <strong data-i18n="trust80g">80G Tax Benefit</strong>
+                            <span data-i18n="trust80gSub">Tax Exemption</span>
+                        </div>
+                    </div>
+                    <div class="trust-badge-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="trust-badge-text">
+                            <strong data-i18n="trustTrans">100% Transparent</strong>
+                            <span data-i18n="trustTransSub">Direct Fund Use</span>
+                        </div>
+                    </div>
+                    <div class="trust-badge-item">
+                        <i class="fas fa-users"></i>
+                        <div class="trust-badge-text">
+                            <strong data-i18n="trustVol">Dedicated Team</strong>
+                            <span data-i18n="trustVolSub">Community Driven</span>
+                        </div>
+                    </div>
+                    <div class="trust-badge-item">
+                        <i class="fas fa-receipt"></i>
+                        <div class="trust-badge-text">
+                            <strong data-i18n="trustReceipt">Instant Receipt</strong>
+                            <span data-i18n="trustReceiptSub">Digital 80G Receipt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery / Impact in Action -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-images"></i>
+                    <span data-i18n="galleryTitle">Our Impact in Action</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="gallerySub">Real glimpses of community transformation on the ground</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="../../brain/a5cce7a1-677c-4a8c-9dca-03d0cf894e16/social_welfare_impact_1789453314804.jpg" alt="Social Welfare Food and Ration Distribution in Bavla">
+                    <div class="gallery-overlay">
+                        <span data-i18n="initSocialTitle">Social Welfare & Food Relief</span>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="assets/education.jpg" alt="Child Education Support in Bavla">
+                    <div class="gallery-overlay">
+                        <span data-i18n="initEduTitle">Education Support</span>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="assets/health.jpg" alt="Free Medical Camp in Bavla">
+                    <div class="gallery-overlay">
+                        <span data-i18n="initHealthTitle">Health & Medical Camp</span>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="assets/environment.jpg" alt="Tree Plantation Drive in Bavla">
+                    <div class="gallery-overlay">
+                        <span data-i18n="initEnvTitle">Tree Plantation Drive</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Kalyan Foundation -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    <span data-i18n="aboutTitle">About Kalyan Foundation</span>
+                </h2>
+            </div>
+            
+            <div class="about-card">
+                <p class="about-text" data-i18n="aboutText">
+                    Kalyan Foundation is committed to building a compassionate, self-reliant society through education, healthcare, environmental protection, and holistic social welfare in Bavla and surrounding regions.
+                </p>
+                <div class="quote-box">
+                    "Together we create change, empower communities and build a better future."
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteer / Partner Join Form -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-user-plus"></i>
+                    <span data-i18n="volunteerTitle">Become a Volunteer / Partner</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="volunteerSub">Join hands with us to create a meaningful impact</p>
+            </div>
+
+            <div class="volunteer-card">
+                <form id="volunteerForm">
+                    <div class="form-group">
+                        <input type="text" id="volName" class="form-input" placeholder="Your Full Name" required data-i18n="namePlaceholder">
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="volPhone" class="form-input" placeholder="Your Phone Number" required data-i18n="phonePlaceholder">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="volCity" class="form-input" placeholder="Your City / Village (e.g., Bavla, Ahmedabad)" required data-i18n="cityPlaceholder">
+                    </div>
+                    <div class="form-group">
+                        <select id="volRole" class="form-input purpose-select">
+                            <option value="edu" data-i18n="volunteerRoleEdu">Teaching / Education Mentor</option>
+                            <option value="health" data-i18n="volunteerRoleHealth">Health Camp Assistance</option>
+                            <option value="env" data-i18n="volunteerRoleEnv">Tree Plantation Drive</option>
+                            <option value="general" data-i18n="volunteerRoleGeneral">Community & Food Relief</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit-volunteer">
+                        <i class="fab fa-whatsapp"></i>
+                        <span data-i18n="submitVolunteerBtn">Send Application via WhatsApp</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Complete Contact & Social Details -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-address-book"></i>
+                    <span data-i18n="contactTitle">Contact & Location</span>
+                </h2>
+            </div>
+
+            <div class="contact-card">
+                <a href="tel:+919909739390" class="contact-row contact-phone">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-info-label">Phone / WhatsApp</span>
+                        <span class="contact-info-val">+91 99097 39390</span>
+                    </div>
+                </a>
+
+                <a href="mailto:kalyanfoundation039@gmail.com" class="contact-row contact-mail">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-info-label">Email Address</span>
+                        <span class="contact-info-val">kalyanfoundation039@gmail.com</span>
+                    </div>
+                </a>
+
+                <a href="https://www.google.com/maps/search/?api=1&query=Bordipa+Nr+Ramjimandir+Bavla+382220" target="_blank" class="contact-row contact-addr">
+                    <div class="contact-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-info-label">Office Address</span>
+                        <span class="contact-info-val" data-i18n="fullAddress">Bordipa, Nr. Ramjimandir, Bavla 382220, Gujarat, India</span>
+                    </div>
+                </a>
+
+                <!-- Social Media Buttons -->
+                <div class="social-buttons-grid">
+                    <a href="https://www.instagram.com/kalyanfoundation_039?utm_source=qr&stkn=cTVzcWhldm9jYzMz" target="_blank" class="btn-social btn-instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/share/1EbpBBfqA7/" target="_blank" class="btn-social btn-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <img src="assets/logo.jpg" alt="Kalyan Foundation Logo" class="footer-logo">
+            <div class="footer-name" data-i18n="orgName">KALYAN FOUNDATION</div>
+            <div class="footer-tagline" data-i18n="tagline">End Is Beginning</div>
+            <div class="footer-copy" data-i18n="rightsReserved">© 2024 Kalyan Foundation. All Rights Reserved.</div>
+        </footer>
+
+        <!-- Sticky Bottom Mobile Navigation Dock -->
+        <nav class="bottom-dock">
+            <a href="tel:+919909739390" class="dock-item">
+                <i class="fas fa-phone-alt"></i>
+                <span data-i18n="callBtn">Call</span>
+            </a>
+            <a href="https://wa.me/919909739390?text=Namaste%20Kalyan%20Foundation,%20I%20want%20to%20know%20more%20about%20your%20NGO." target="_blank" class="dock-item dock-whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                <span data-i18n="whatsappBtn">WhatsApp</span>
+            </a>
+            <button type="button" class="dock-item save-contact-btn">
+                <i class="fas fa-address-card"></i>
+                <span data-i18n="saveContactBtn">Save</span>
+            </button>
+            <a href="#donationSection" class="dock-item dock-donate">
+                <i class="fas fa-heart"></i>
+                <span>Donate</span>
+            </a>
+        </nav>
+
+    </main>
+
+    <!-- QR Code / Share Modal Window -->
+    <div class="modal-backdrop" id="qrModal">
+        <div class="modal-content">
+            <button type="button" class="modal-close-btn" id="closeQrModal" title="Close">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="modal-title" data-i18n="scanQrTitle">Scan & Tap NFC Profile</h3>
+            <p class="modal-sub" data-i18n="scanQrSub">Scan this QR code with any smartphone camera to open this digital card</p>
+            
+            <div class="qr-box-wrap">
+                <div id="profileQrCode"></div>
+            </div>
+            
+            <button type="button" class="btn-copy-link" id="copyLinkBtn">
+                <i class="fas fa-link"></i>
+                <span data-i18n="copyLinkBtn">Copy Profile Link</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Photo Lightbox Modal Window -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <button type="button" class="lightbox-close" id="closeLightbox">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="lightbox-img-wrap">
+            <img id="lightboxImg" src="" alt="Impact Preview">
+        </div>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/translations.js"></script>
+    <script src="js/qrcode.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
