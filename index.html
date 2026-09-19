@@ -665,10 +665,9 @@
             <div class="receipt-tab-content" id="receiptPreviewTab">
                 <div class="receipt-preview-wrapper">
                     <div id="receiptDocumentToPrint" class="kalyan-official-receipt-sheet">
-                        
-                        <!-- PAGE 1: DONATION RECEIPT -->
-                        <div class="receipt-page page-1-content">
-                            <!-- Top Header Box -->
+                        <div class="receipt-inner-frame">
+                            
+                            <!-- TOP HEADER SECTION -->
                             <div class="r-top-header">
                                 <div class="r-logo-cell">
                                     <img src="assets/logo.jpg" alt="Kalyan Foundation Logo" class="r-logo-img">
@@ -676,11 +675,11 @@
                                 <div class="r-header-center">
                                     <h1 class="r-trust-name">KALYAN FOUNDATION</h1>
                                     <p class="r-trust-addr">BORDIPA, Nr, Ramjimandir bavla</p>
-                                    <p class="r-trust-contacts">Phone: 09909739390 Email:kalyanfoundation039@gmail.com</p>
+                                    <p class="r-trust-contacts">Phone: 09909739390 &nbsp;•&nbsp; Email: kalyanfoundation039@gmail.com</p>
                                 </div>
                             </div>
 
-                            <!-- Legal Reg. Strip -->
+                            <!-- STATUTORY REGISTRATION STRIP -->
                             <div class="r-legal-box">
                                 <div class="r-legal-line-1">
                                     <span><strong>Regd. No.:</strong> GUJ/20311/AHEMDABAD</span>
@@ -691,19 +690,19 @@
                                 </div>
                             </div>
 
-                            <!-- Title -->
+                            <!-- RECEIPT TITLE -->
                             <div class="r-title-heading">
                                 <u>Donation Receipt</u>
                             </div>
 
-                            <!-- Receipt Metadata Line -->
+                            <!-- RECEIPT METADATA ROW -->
                             <div class="r-line-meta">
-                                <div><strong>Receipt No.:</strong> <span class="u-val" id="rPrintNo">5</span></div>
-                                <div><strong>F.Y.:</strong> <span class="u-val" id="rPrintFY">2024-2025</span></div>
-                                <div><strong>Date:</strong> <span class="u-val" id="rPrintDate">07/03/2025</span></div>
+                                <div><span class="r-lbl">Receipt No.:</span> <span class="u-val meta-no" id="rPrintNo">5</span></div>
+                                <div><span class="r-lbl">F.Y.:</span> <span class="u-val meta-fy" id="rPrintFY">2024-2025</span></div>
+                                <div><span class="r-lbl">Date:</span> <span class="u-val meta-date" id="rPrintDate">07/03/2025</span></div>
                             </div>
 
-                            <!-- Body Detail Rows -->
+                            <!-- DONOR DETAILS TABLE / ROWS -->
                             <div class="r-detail-rows">
                                 <div class="r-line-full">
                                     <span class="r-lbl">Received with thanks from M/s. / Mr./Mrs.:</span>
@@ -716,29 +715,29 @@
                                 </div>
 
                                 <div class="r-line-grid-3">
-                                    <div><span class="r-lbl">Tel. No.:</span> <span class="u-val" id="rPrintTel">9099827434</span></div>
-                                    <div><span class="r-lbl">Email:</span> <span class="u-val" id="rPrintEmail">divya_abdin@yahoo.co.in</span></div>
-                                    <div><span class="r-lbl">Donor`s PAN:</span> <span class="u-val" id="rPrintPan">ARYPP3355J</span></div>
+                                    <div class="col-tel"><span class="r-lbl">Tel. No.:</span> <span class="u-val-flex" id="rPrintTel">9099827434</span></div>
+                                    <div class="col-email"><span class="r-lbl">Email:</span> <span class="u-val-flex" id="rPrintEmail">divya_abdin@yahoo.co.in</span></div>
+                                    <div class="col-pan"><span class="r-lbl">Donor`s PAN:</span> <span class="u-val-flex" id="rPrintPan">ARYPP3355J</span></div>
                                 </div>
 
                                 <div class="r-line-grid-2">
-                                    <div><span class="r-lbl">Aadhaar No.:</span> <span class="u-val" id="rPrintAadhaar">722333031217</span></div>
-                                    <div><span class="r-lbl">Rupees:</span> <span class="u-val" id="rPrintWords">One Lakhs Only</span></div>
+                                    <div class="col-aadhaar"><span class="r-lbl">Aadhaar No.:</span> <span class="u-val-flex" id="rPrintAadhaar">722333031217</span></div>
+                                    <div class="col-words"><span class="r-lbl">Rupees:</span> <span class="u-val-flex bold-words" id="rPrintWords">One Lakhs Only</span></div>
                                 </div>
 
                                 <div class="r-line-grid-3">
-                                    <div><span class="r-lbl">on a/c. of:</span> <span class="u-val" id="rPrintAccount">Earmarked Fund</span></div>
-                                    <div><span class="r-lbl">for:</span> <span class="u-val" id="rPrintFor">&nbsp;</span></div>
-                                    <div><span class="r-lbl">by:</span> <span class="u-val" id="rPrintBy">Bank Transfer</span></div>
+                                    <div class="col-account"><span class="r-lbl">on a/c. of:</span> <span class="u-val-flex" id="rPrintAccount">Earmarked Fund</span></div>
+                                    <div class="col-for"><span class="r-lbl">for:</span> <span class="u-val-flex" id="rPrintFor">Social Welfare</span></div>
+                                    <div class="col-by"><span class="r-lbl">by:</span> <span class="u-val-flex" id="rPrintBy">Bank Transfer</span></div>
                                 </div>
 
                                 <div class="r-line-grid-2">
-                                    <div><span class="r-lbl">Date:</span> <span class="u-val" id="rPrintPayDate">03/03/2025</span></div>
-                                    <div><span class="r-lbl">Payment Details:</span> <span class="u-val" id="rPrintPaymentDetails">UTR NO/RRN .506211287723</span></div>
+                                    <div class="col-paydate"><span class="r-lbl">Date:</span> <span class="u-val-flex" id="rPrintPayDate">03/03/2025</span></div>
+                                    <div class="col-paydetails"><span class="r-lbl">Payment Details:</span> <span class="u-val-flex" id="rPrintPaymentDetails">UTR NO/RRN .506211287723</span></div>
                                 </div>
                             </div>
 
-                            <!-- Bottom Box Row -->
+                            <!-- AMOUNT BOX & THANK YOU ROW -->
                             <div class="r-bottom-bar">
                                 <div class="r-amount-box">
                                     Rs. <span id="rPrintAmountNum">100000/-</span>
@@ -747,10 +746,8 @@
                                     Thank You
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- PAGE 2: VERIFICATION & STATUTORY REGISTRATIONS -->
-                        <div class="receipt-page page-2-content">
+                            <!-- VERIFICATION SECTION -->
                             <div class="r-verif-box">
                                 <h3 class="r-verif-heading">VERIFICATION</h3>
                                 <p class="r-verif-text">
@@ -759,18 +756,15 @@
 
                                 <div class="r-verif-sign-grid">
                                     <div class="r-verif-date-col">
-                                        <strong>Date:</strong> <span class="u-val" id="rPrintVerifDate">07/03/2025</span>
+                                        <strong>Date:</strong> <span class="u-val meta-date" id="rPrintVerifDate">07/03/2025</span>
                                     </div>
                                     <div class="r-verif-sign-col">
                                         <span class="r-lbl-sign">Signature:</span>
                                         <div class="r-stamp-signature-box">
                                             <!-- Oval Trust Stamp SVG -->
-                                            <svg viewBox="0 0 170 120" width="140" height="95" class="r-stamp-svg">
-                                                <!-- Outer Oval -->
+                                            <svg viewBox="0 0 170 120" width="145" height="100" class="r-stamp-svg">
                                                 <ellipse cx="85" cy="60" rx="80" ry="54" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6,2"/>
-                                                <!-- Inner Oval -->
                                                 <ellipse cx="85" cy="60" rx="72" ry="46" fill="none" stroke="#1d4ed8" stroke-width="1.8"/>
-                                                <!-- Top Arc Text -->
                                                 <path id="ovalTopCurve" d="M 18 60 A 67 40 0 0 1 152 60" fill="transparent"/>
                                                 <path id="ovalBottomCurve" d="M 18 60 A 67 40 0 0 0 152 60" fill="transparent"/>
                                                 <text fill="#1d4ed8" font-size="10.5" font-weight="900" letter-spacing="1">
@@ -779,19 +773,17 @@
                                                 <text fill="#1d4ed8" font-size="9" font-weight="900" letter-spacing="0.5">
                                                     <textPath href="#ovalBottomCurve" startOffset="50%" text-anchor="middle">AHMEDABAD</textPath>
                                                 </text>
-                                                <!-- Center Details -->
                                                 <text x="85" y="54" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="800">Reg.No</text>
                                                 <text x="85" y="66" text-anchor="middle" fill="#1d4ed8" font-size="9.5" font-weight="900">20311</text>
                                                 <text x="85" y="78" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="700">AHMEDABAD</text>
                                             </svg>
-                                            <!-- Handwritten Signature Overlay -->
                                             <div class="r-handwritten-signature">Jignesh Bhatt</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Legal Exemption Footer Block -->
+                            <!-- STATUTORY EXEMPTIONS FOOTER -->
                             <div class="r-statutory-block">
                                 <div class="r-stat-row">
                                     <span><strong>PAN:</strong> AADTK8237A</span>
@@ -810,8 +802,8 @@
                                     Charitable Institutions are not required to affix revenue stamp on receipt under schedule | ART - 53 exemption(b) of the Indian Stamp Act.
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
             </div>

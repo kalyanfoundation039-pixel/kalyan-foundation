@@ -660,21 +660,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
         const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
         const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
-        const filename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
-
         const opt = {
-            margin: [8, 6, 8, 6],
+            margin: [5, 5, 5, 5],
             filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
+            image: { type: 'jpeg', quality: 0.99 },
             html2canvas: {
-                scale: 2,
+                scale: 2.2,
                 useCORS: true,
                 letterRendering: true,
                 scrollX: 0,
                 scrollY: 0,
+                windowWidth: 800,
                 backgroundColor: '#ffffff'
             },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all'] }
         };
 
         const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');

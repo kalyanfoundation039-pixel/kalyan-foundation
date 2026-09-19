@@ -1645,11 +1645,11 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   OFFICIAL 80G RECEIPT SHEET STYLING (MATCHES SAMPLE PDF 100%)
+   OFFICIAL 80G RECEIPT SHEET STYLING (FULL A4 WIDTH & ELEGANT FRAME)
    -------------------------------------------------------------------------- */
 .receipt-preview-wrapper {
   background: #cbd5e1;
-  padding: 12px;
+  padding: 16px 8px;
   border-radius: var(--radius-sm);
   display: flex;
   justify-content: center;
@@ -1657,40 +1657,35 @@ body {
 }
 
 [data-theme="dark"] .receipt-preview-wrapper {
-  background: #0f172a;
+  background: #0b1320;
 }
 
 .kalyan-official-receipt-sheet {
-  width: 100%;
-  max-width: 580px;
+  width: 790px !important;
+  min-width: 790px !important;
+  max-width: 790px !important;
   background: #ffffff !important;
   color: #000000 !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  padding: 0;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.25);
+  padding: 7px;
   box-sizing: border-box;
+  border: 2.5px solid #000000;
 }
 
-.receipt-page {
-  border: 2px solid #000000;
-  padding: 16px 20px 20px 20px;
+.receipt-inner-frame {
+  border: 1.2px solid #000000;
+  padding: 14px 18px;
   background: #ffffff;
-  color: #000000;
   box-sizing: border-box;
-  position: relative;
 }
 
-.receipt-page.page-2-content {
-  margin-top: 14px;
-  border-top: 2px solid #000000;
-}
-
-/* Page 1 Header */
+/* Header Section */
 .r-top-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 10px;
+  gap: 16px;
+  padding-bottom: 6px;
 }
 
 .r-logo-cell {
@@ -1698,48 +1693,49 @@ body {
 }
 
 .r-logo-img {
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #000000;
 }
 
 .r-header-center {
   flex: 1;
   text-align: center;
+  margin-right: 30px;
 }
 
 .r-trust-name {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   font-weight: 900;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
   margin: 0 0 2px 0;
   color: #000000;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif;
 }
 
 .r-trust-addr {
-  font-size: 0.76rem;
+  font-size: 0.82rem;
   margin: 0;
-  color: #111111;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
 }
 
 .r-trust-contacts {
-  font-size: 0.74rem;
+  font-size: 0.80rem;
   margin: 2px 0 0 0;
-  color: #111111;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
 }
 
 /* Legal Reg. Box */
 .r-legal-box {
   border-top: 1.5px solid #000000;
   border-bottom: 1.5px solid #000000;
-  padding: 6px 10px;
-  margin: 4px 0 10px 0;
-  font-size: 0.74rem;
+  padding: 5px 10px;
+  margin: 4px 0 8px 0;
+  font-size: 0.78rem;
   color: #000000;
 }
 
@@ -1756,9 +1752,9 @@ body {
 /* Title */
 .r-title-heading {
   text-align: center;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 900;
-  margin: 8px 0 12px 0;
+  margin: 6px 0 8px 0;
   color: #000000;
 }
 
@@ -1766,9 +1762,21 @@ body {
 .r-line-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.76rem;
+  font-size: 0.80rem;
   color: #000000;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.meta-no {
+  min-width: 60px;
+}
+
+.meta-fy {
+  min-width: 90px;
+}
+
+.meta-date {
+  min-width: 90px;
 }
 
 .u-val {
@@ -1776,8 +1784,22 @@ body {
   border-bottom: 1.5px solid #000000;
   font-weight: 700;
   padding: 0 4px;
-  min-width: 60px;
   color: #000000;
+}
+
+.r-detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 0.78rem;
+  color: #000000;
+}
+
+.r-line-full {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  line-height: 1.4;
 }
 
 .u-val-full {
@@ -1787,21 +1809,7 @@ body {
   padding: 0 4px;
   color: #000000;
   word-break: break-word;
-}
-
-.r-detail-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 0.75rem;
-  color: #000000;
-}
-
-.r-line-full {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  line-height: 1.5;
+  font-size: 0.80rem;
 }
 
 .r-lbl {
@@ -1812,16 +1820,46 @@ body {
 
 .r-line-grid-3 {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1.1fr;
-  gap: 8px;
+  grid-template-columns: 200px 1fr 180px;
+  gap: 12px;
   align-items: baseline;
 }
 
 .r-line-grid-2 {
   display: grid;
-  grid-template-columns: 1.1fr 1.5fr;
-  gap: 12px;
+  grid-template-columns: 240px 1fr;
+  gap: 14px;
   align-items: baseline;
+}
+
+.col-tel, .col-email, .col-pan, .col-aadhaar, .col-words, .col-account, .col-for, .col-by, .col-paydate, .col-paydetails {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.u-val-flex {
+  flex: 1;
+  border-bottom: 1.5px solid #000000;
+  font-weight: 700;
+  padding: 0 4px;
+  color: #000000;
+  white-space: nowrap;
+  font-size: 0.80rem;
+}
+
+.col-email .u-val-flex {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.col-words .u-val-flex {
+  white-space: normal;
+}
+
+.bold-words {
+  font-weight: 800;
 }
 
 /* Bottom Bar */
@@ -1829,14 +1867,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 18px;
-  padding-top: 8px;
+  margin-top: 10px;
+  margin-bottom: 8px;
 }
 
 .r-amount-box {
   border: 2px solid #000000;
-  padding: 6px 14px;
-  font-size: 1rem;
+  padding: 5px 14px;
+  font-size: 1.1rem;
   font-weight: 900;
   color: #000000;
   letter-spacing: 0.5px;
@@ -1844,47 +1882,47 @@ body {
 }
 
 .r-thank-you {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 900;
   color: #000000;
   margin-right: 20px;
 }
 
-/* Page 2: Verification Section */
+/* Verification Section */
 .r-verif-box {
   border: 1.5px solid #000000;
-  padding: 12px 14px;
-  margin-bottom: 14px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
 }
 
 .r-verif-heading {
   text-align: center;
-  font-size: 0.92rem;
+  font-size: 0.90rem;
   font-weight: 900;
-  margin: 0 0 8px 0;
+  margin: 0 0 5px 0;
   letter-spacing: 0.5px;
   color: #000000;
 }
 
 .r-verif-text {
   font-size: 0.72rem;
-  line-height: 1.55;
+  line-height: 1.48;
   text-align: justify;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   color: #000000;
 }
 
 .r-verif-sign-grid {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 8px;
+  align-items: center;
 }
 
 .r-verif-date-col {
-  font-size: 0.78rem;
+  font-size: 0.80rem;
   color: #000000;
-  padding-top: 10px;
+  padding-top: 6px;
 }
 
 .r-verif-sign-col {
@@ -1895,14 +1933,14 @@ body {
 
 .r-lbl-sign {
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.80rem;
   color: #000000;
 }
 
 .r-stamp-signature-box {
   position: relative;
   display: inline-block;
-  width: 140px;
+  width: 145px;
   height: 95px;
 }
 
@@ -1914,7 +1952,7 @@ body {
 
 .r-handwritten-signature {
   position: absolute;
-  top: 32px;
+  top: 34px;
   left: 20px;
   font-family: 'Brush Script MT', 'Segoe Script', 'Great Vibes', cursive;
   font-size: 1.35rem;
@@ -1928,21 +1966,21 @@ body {
 /* Statutory Exemption Footer */
 .r-statutory-block {
   border-top: 1.5px solid #000000;
-  padding-top: 10px;
-  font-size: 0.68rem;
-  line-height: 1.6;
+  padding-top: 6px;
+  font-size: 0.70rem;
+  line-height: 1.5;
   color: #000000;
 }
 
 .r-stat-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 2px;
 }
 
 .r-stat-notice {
-  margin-top: 4px;
+  margin-top: 3px;
   font-weight: 600;
   font-size: 0.68rem;
   color: #111111;
