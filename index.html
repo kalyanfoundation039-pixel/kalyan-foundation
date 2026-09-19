@@ -309,6 +309,10 @@
                         <i class="fab fa-whatsapp"></i>
                         <span id="donateBtnLabel" data-i18n="donateWhatsAppBtn">Donate via WhatsApp</span>
                     </button>
+                    <button type="button" id="openReceiptModalBtn" class="btn-get-receipt">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span data-i18n="downloadPdfBtn">Download 80G PDF Receipt</span>
+                    </button>
                 </div>
 
                 <!-- Trust Badges -->
@@ -555,7 +559,289 @@
         <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
 
+    <!-- 80G Donation & Official Receipt Modal Window -->
+    <div class="modal-backdrop receipt-modal-backdrop" id="donationReceiptModal">
+        <div class="modal-content receipt-modal-content">
+            <button type="button" class="modal-close-btn" id="closeReceiptModal" title="Close">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="receipt-modal-header">
+                <div class="receipt-badge-pill">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Official 80G Tax Exemption (AADTK8237AF20241)</span>
+                </div>
+                <h3 class="modal-title" data-i18n="receiptModalTitle">80G Donation Receipt & WhatsApp</h3>
+                <p class="modal-sub" data-i18n="receiptModalSub">Fill details to download official 80G tax receipt PDF & send to WhatsApp</p>
+            </div>
+
+            <!-- Modal Navigation Tabs -->
+            <div class="receipt-tabs-nav">
+                <button type="button" class="receipt-tab-btn active" data-tab="donorFormTab">
+                    <i class="fas fa-user-edit"></i>
+                    <span data-i18n="tabDetails">Donor Details</span>
+                </button>
+                <button type="button" class="receipt-tab-btn" data-tab="receiptPreviewTab" id="previewTabBtn">
+                    <i class="fas fa-file-invoice"></i>
+                    <span data-i18n="tabPreview">Official Receipt Preview</span>
+                </button>
+            </div>
+
+            <!-- Tab 1: Donor Information Form -->
+            <div class="receipt-tab-content active" id="donorFormTab">
+                <form id="receiptDonorForm" class="donor-input-form">
+                    <div class="form-row-2">
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="donorNameLabel">Donor Full Name / Trust Name *</label>
+                            <input type="text" id="donorName" class="modal-input" placeholder="e.g. PATEL DIVYABEN BABUBHAI" required>
+                        </div>
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="donorPhoneLabel">Mobile / WhatsApp Number *</label>
+                            <input type="tel" id="donorPhone" class="modal-input" placeholder="e.g. 9099827434" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="donorEmailLabel">Email Address</label>
+                            <input type="email" id="donorEmail" class="modal-input" placeholder="e.g. donor@example.com">
+                        </div>
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="donorPanLabel">Donor PAN (For 80G Tax Exemption)</label>
+                            <input type="text" id="donorPan" class="modal-input pan-input" placeholder="e.g. ARYPP3355J" maxlength="10" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" data-i18n="donorAddressLabel">Full Address (with City & Pincode)</label>
+                        <input type="text" id="donorAddress" class="modal-input" placeholder="e.g. 64, SUMIN PARK, G.D. HIGHSCHOOL, SAIJPUR, AHMEDABAD..382345">
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-field-group">
+                            <label class="form-field-label">Donation Amount (₹) *</label>
+                            <input type="number" id="modalDonationAmount" class="modal-input" min="1" step="50" required>
+                        </div>
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="donorAadhaarLabel">Aadhaar No. (Optional)</label>
+                            <input type="text" id="donorAadhaar" class="modal-input" placeholder="e.g. 722333031217" maxlength="14">
+                        </div>
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="payModeLabel">Payment Mode</label>
+                            <select id="donorPayMode" class="modal-input modal-select">
+                                <option value="Bank Transfer">Bank Transfer (NEFT/RTGS/IMPS)</option>
+                                <option value="UPI / QR">UPI (GPay / PhonePe / Paytm / BHIM)</option>
+                                <option value="Cheque / DD">Cheque / Demand Draft</option>
+                                <option value="Cash Deposit">Cash / Voluntary Deposit</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-field-group">
+                            <label class="form-field-label" data-i18n="payUtrLabel">UTR / Transaction Ref No. / Cheque No.</label>
+                            <input type="text" id="donorUtr" class="modal-input" placeholder="e.g. UTR NO/RRN .506211287723">
+                        </div>
+                        <div class="form-field-group">
+                            <label class="form-field-label">Payment Date</label>
+                            <input type="date" id="donorPayDate" class="modal-input">
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label">On Account Of / Cause</label>
+                        <select id="modalDonationCause" class="modal-input modal-select">
+                            <option value="Earmarked Fund">Earmarked Fund (જનરલ સેવા ફંડ)</option>
+                            <option value="Social Welfare & Food Relief">Food & Social Welfare Support (અન્નદાન & સામાજિક સેવા)</option>
+                            <option value="Child Education Support">Child Education & Books Support (શિક્ષણ સહાય)</option>
+                            <option value="Health & Medical Camp">Free Medical & Health Camps (આરોગ્ય કેમ્પ)</option>
+                            <option value="Environment & Tree Plantation">Tree Plantation & Nature Care (વૃક્ષારોપણ)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab 2: Live Receipt Preview (matching exact reference PDF layout) -->
+            <div class="receipt-tab-content" id="receiptPreviewTab">
+                <div class="receipt-preview-wrapper">
+                    <div id="receiptDocumentToPrint" class="kalyan-official-receipt-sheet">
+                        
+                        <!-- PAGE 1: DONATION RECEIPT -->
+                        <div class="receipt-page page-1-content">
+                            <!-- Top Header Box -->
+                            <div class="r-top-header">
+                                <div class="r-logo-cell">
+                                    <img src="assets/logo.jpg" alt="Kalyan Foundation Logo" class="r-logo-img">
+                                </div>
+                                <div class="r-header-center">
+                                    <h1 class="r-trust-name">KALYAN FOUNDATION</h1>
+                                    <p class="r-trust-addr">BORDIPA, Nr, Ramjimandir bavla</p>
+                                    <p class="r-trust-contacts">Phone: 09909739390 Email:kalyanfoundation039@gmail.com</p>
+                                </div>
+                            </div>
+
+                            <!-- Legal Reg. Strip -->
+                            <div class="r-legal-box">
+                                <div class="r-legal-line-1">
+                                    <span><strong>Regd. No.:</strong> GUJ/20311/AHEMDABAD</span>
+                                    <span><strong>PAN No.:</strong> AADTK8237A</span>
+                                </div>
+                                <div class="r-legal-line-2">
+                                    <strong>I.T. Exemption Cert. No. (80G No.):</strong> AADTK8237AF20241
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <div class="r-title-heading">
+                                <u>Donation Receipt</u>
+                            </div>
+
+                            <!-- Receipt Metadata Line -->
+                            <div class="r-line-meta">
+                                <div><strong>Receipt No.:</strong> <span class="u-val" id="rPrintNo">5</span></div>
+                                <div><strong>F.Y.:</strong> <span class="u-val" id="rPrintFY">2024-2025</span></div>
+                                <div><strong>Date:</strong> <span class="u-val" id="rPrintDate">07/03/2025</span></div>
+                            </div>
+
+                            <!-- Body Detail Rows -->
+                            <div class="r-detail-rows">
+                                <div class="r-line-full">
+                                    <span class="r-lbl">Received with thanks from M/s. / Mr./Mrs.:</span>
+                                    <span class="u-val-full" id="rPrintName">PATEL DIVYABEN BABUBHAI</span>
+                                </div>
+
+                                <div class="r-line-full">
+                                    <span class="r-lbl">Address:</span>
+                                    <span class="u-val-full" id="rPrintAddress">64,SUMIN PARK, G.D. HIGHSCHOOL,SAIJPUR, AHEMDABAD..382345</span>
+                                </div>
+
+                                <div class="r-line-grid-3">
+                                    <div><span class="r-lbl">Tel. No.:</span> <span class="u-val" id="rPrintTel">9099827434</span></div>
+                                    <div><span class="r-lbl">Email:</span> <span class="u-val" id="rPrintEmail">divya_abdin@yahoo.co.in</span></div>
+                                    <div><span class="r-lbl">Donor`s PAN:</span> <span class="u-val" id="rPrintPan">ARYPP3355J</span></div>
+                                </div>
+
+                                <div class="r-line-grid-2">
+                                    <div><span class="r-lbl">Aadhaar No.:</span> <span class="u-val" id="rPrintAadhaar">722333031217</span></div>
+                                    <div><span class="r-lbl">Rupees:</span> <span class="u-val" id="rPrintWords">One Lakhs Only</span></div>
+                                </div>
+
+                                <div class="r-line-grid-3">
+                                    <div><span class="r-lbl">on a/c. of:</span> <span class="u-val" id="rPrintAccount">Earmarked Fund</span></div>
+                                    <div><span class="r-lbl">for:</span> <span class="u-val" id="rPrintFor">&nbsp;</span></div>
+                                    <div><span class="r-lbl">by:</span> <span class="u-val" id="rPrintBy">Bank Transfer</span></div>
+                                </div>
+
+                                <div class="r-line-grid-2">
+                                    <div><span class="r-lbl">Date:</span> <span class="u-val" id="rPrintPayDate">03/03/2025</span></div>
+                                    <div><span class="r-lbl">Payment Details:</span> <span class="u-val" id="rPrintPaymentDetails">UTR NO/RRN .506211287723</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Box Row -->
+                            <div class="r-bottom-bar">
+                                <div class="r-amount-box">
+                                    Rs. <span id="rPrintAmountNum">100000/-</span>
+                                </div>
+                                <div class="r-thank-you">
+                                    Thank You
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PAGE 2: VERIFICATION & STATUTORY REGISTRATIONS -->
+                        <div class="receipt-page page-2-content">
+                            <div class="r-verif-box">
+                                <h3 class="r-verif-heading">VERIFICATION</h3>
+                                <p class="r-verif-text">
+                                    I, <strong>JIGNESH BHATT</strong> son/daughter/wife of <strong>HASMUKHBHAI BHATT</strong>, solemnly declare that to the best of my knowledge and belief, the information given in the certificate is correct and complete and is in accordance with the provisions of the Income- Tax Act, 1961. I further declare that I am making this certificate in my capacity as President and I am also competent to issue this certificate. I am holding PAN <strong>AADTK8237A</strong>
+                                </p>
+
+                                <div class="r-verif-sign-grid">
+                                    <div class="r-verif-date-col">
+                                        <strong>Date:</strong> <span class="u-val" id="rPrintVerifDate">07/03/2025</span>
+                                    </div>
+                                    <div class="r-verif-sign-col">
+                                        <span class="r-lbl-sign">Signature:</span>
+                                        <div class="r-stamp-signature-box">
+                                            <!-- Oval Trust Stamp SVG -->
+                                            <svg viewBox="0 0 170 120" width="140" height="95" class="r-stamp-svg">
+                                                <!-- Outer Oval -->
+                                                <ellipse cx="85" cy="60" rx="80" ry="54" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6,2"/>
+                                                <!-- Inner Oval -->
+                                                <ellipse cx="85" cy="60" rx="72" ry="46" fill="none" stroke="#1d4ed8" stroke-width="1.8"/>
+                                                <!-- Top Arc Text -->
+                                                <path id="ovalTopCurve" d="M 18 60 A 67 40 0 0 1 152 60" fill="transparent"/>
+                                                <path id="ovalBottomCurve" d="M 18 60 A 67 40 0 0 0 152 60" fill="transparent"/>
+                                                <text fill="#1d4ed8" font-size="10.5" font-weight="900" letter-spacing="1">
+                                                    <textPath href="#ovalTopCurve" startOffset="50%" text-anchor="middle">KALYAN FOUNDATION</textPath>
+                                                </text>
+                                                <text fill="#1d4ed8" font-size="9" font-weight="900" letter-spacing="0.5">
+                                                    <textPath href="#ovalBottomCurve" startOffset="50%" text-anchor="middle">AHMEDABAD</textPath>
+                                                </text>
+                                                <!-- Center Details -->
+                                                <text x="85" y="54" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="800">Reg.No</text>
+                                                <text x="85" y="66" text-anchor="middle" fill="#1d4ed8" font-size="9.5" font-weight="900">20311</text>
+                                                <text x="85" y="78" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="700">AHMEDABAD</text>
+                                            </svg>
+                                            <!-- Handwritten Signature Overlay -->
+                                            <div class="r-handwritten-signature">Jignesh Bhatt</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Legal Exemption Footer Block -->
+                            <div class="r-statutory-block">
+                                <div class="r-stat-row">
+                                    <span><strong>PAN:</strong> AADTK8237A</span>
+                                    <span><strong>Section 10(23C) (vi) Regn No.:</strong> AADTK8237AF20241</span>
+                                    <span><strong>Dated:</strong> 11/06/2024</span>
+                                </div>
+                                <div class="r-stat-row">
+                                    <span><strong>80G Regn No.:</strong> AADTK8237AF20241</span>
+                                    <span><strong>Dated:</strong> 11/06/2024</span>
+                                </div>
+                                <div class="r-stat-row">
+                                    <span><strong>FCRA Registration Number:</strong> /</span>
+                                    <span><strong>CSR REG NUMBER:</strong> 00077225</span>
+                                </div>
+                                <div class="r-stat-notice">
+                                    Charitable Institutions are not required to affix revenue stamp on receipt under schedule | ART - 53 exemption(b) of the Indian Stamp Act.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Grid inside Modal -->
+            <div class="receipt-modal-actions">
+                <button type="button" id="comboDownloadAndWhatsAppBtn" class="btn-action-primary-combo">
+                    <i class="fas fa-bolt"></i>
+                    <span data-i18n="downloadAndSendBtn">Download PDF & Open WhatsApp</span>
+                </button>
+                <div class="actions-split-grid">
+                    <button type="button" id="downloadPdfReceiptBtn" class="btn-action-secondary-pdf">
+                        <i class="fas fa-file-pdf"></i>
+                        <span data-i18n="downloadPdfBtn">Download PDF</span>
+                    </button>
+                    <button type="button" id="sendWhatsAppReceiptBtn" class="btn-action-secondary-wa">
+                        <i class="fab fa-whatsapp"></i>
+                        <span data-i18n="sendWhatsappBtn">Send to WhatsApp</span>
+                    </button>
+                    <button type="button" id="printReceiptDirectBtn" class="btn-action-secondary-print">
+                        <i class="fas fa-print"></i>
+                        <span data-i18n="printReceiptBtn">Print</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/qrcode.min.js"></script>
     <script src="js/app.js"></script>

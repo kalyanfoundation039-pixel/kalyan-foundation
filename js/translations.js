@@ -82,7 +82,30 @@ const translations = {
     copyLinkBtn: "Copy Profile Link",
     linkCopied: "Link Copied to Clipboard!",
     contactSavedMsg: "Kalyan Foundation contact card downloaded!",
-    rightsReserved: "© 2024 Kalyan Foundation. All Rights Reserved."
+    rightsReserved: "© 2024 Kalyan Foundation. All Rights Reserved.",
+    
+    // Receipt Modal & PDF Generator
+    receiptModalTitle: "80G Donation Receipt & WhatsApp",
+    receiptModalSub: "Fill details to download official 80G tax receipt PDF & send to WhatsApp",
+    tabDetails: "Donor Details",
+    tabPreview: "Official Receipt Preview",
+    donorNameLabel: "Donor Full Name / Trust Name",
+    donorPhoneLabel: "Mobile / WhatsApp Number",
+    donorEmailLabel: "Email Address",
+    donorAddressLabel: "Address / City / Pincode",
+    donorPanLabel: "Donor PAN (For 80G Exemption)",
+    donorAadhaarLabel: "Aadhaar Number (Optional)",
+    payModeLabel: "Payment Mode",
+    payUtrLabel: "UTR / Transaction Ref No. / Cheque No.",
+    modeBankTransfer: "Bank Transfer (NEFT / RTGS / IMPS)",
+    modeUpi: "UPI / QR / GPay / PhonePe / Paytm",
+    modeCheque: "Cheque / DD",
+    modeCash: "Cash / Voluntary Deposit",
+    downloadPdfBtn: "Download PDF Receipt",
+    sendWhatsappBtn: "Send Details to WhatsApp",
+    downloadAndSendBtn: "Download PDF & Open WhatsApp",
+    printReceiptBtn: "Print Receipt",
+    receiptDownloaded: "Official 80G Receipt PDF downloaded successfully!"
   },
   gu: {
     orgName: "કલ્યાણ ફાઉન્ડેશન",
@@ -166,7 +189,30 @@ const translations = {
     copyLinkBtn: "પ્રોફાઈલ લિંક કોપી કરો",
     linkCopied: "લિંક સફળતાપૂર્વક કોપી થઈ ગઈ!",
     contactSavedMsg: "કલ્યાણ ફાઉન્ડેશન કોન્ટેક્ટ કાર્ડ સેવ થઈ ગયું!",
-    rightsReserved: "© ૨૦૨૪ કલ્યાણ ફાઉન્ડેશન. સર્વ હક સુરક્ષિત."
+    rightsReserved: "© ૨૦૨૪ કલ્યાણ ફાઉન્ડેશન. સર્વ હક સુરક્ષિત.",
+    
+    // Receipt Modal & PDF Generator
+    receiptModalTitle: "80G દાન પાવતી અને WhatsApp",
+    receiptModalSub: "ઓફિશિયલ 80G ટેક્સ પાવતી PDF ડાઉનલોડ કરવા અને WhatsApp પર મોકલવા વિગતો ભરો",
+    tabDetails: "દાતાની વિગત",
+    tabPreview: "ઓફિશિયલ પાવતી પ્રિવ્યુ",
+    donorNameLabel: "દાતાનું પૂરું નામ",
+    donorPhoneLabel: "મોબાઈલ / WhatsApp નંબર",
+    donorEmailLabel: "ઈમેલ એડ્રેસ",
+    donorAddressLabel: "સરનામું, શહેર અને પીનકોડ",
+    donorPanLabel: "PAN નંબર (80G કરમુક્તિ માટે)",
+    donorAadhaarLabel: "આધાર નંબર (મરજિયાત)",
+    payModeLabel: "ચૂકવણી પદ્ધતિ",
+    payUtrLabel: "UTR / ટ્રાન્ઝેક્શન રેફરન્સ નંબર / ચેક નં.",
+    modeBankTransfer: "બેંક ટ્રાન્સફર (NEFT / RTGS / IMPS)",
+    modeUpi: "UPI / QR / GPay / PhonePe / Paytm",
+    modeCheque: "ચેક / DD",
+    modeCash: "રોકડ / સ્વૈચ્છિક જમા",
+    downloadPdfBtn: "PDF પાવતી ડાઉનલોડ કરો",
+    sendWhatsappBtn: "WhatsApp પર વિગત મોકલો",
+    downloadAndSendBtn: "PDF ડાઉનલોડ કરો & WhatsApp ખોલો",
+    printReceiptBtn: "પ્રિન્ટ પાવતી",
+    receiptDownloaded: "ઓફિશિયલ 80G પાવતી PDF સફળતાપૂર્વક ડાઉનલોડ થઈ ગઈ છે!"
   },
   hi: {
     orgName: "कल्याण फाउंडेशन",
@@ -250,6 +296,29 @@ const translations = {
     copyLinkBtn: "प्रोफाइल लिंक कॉपी करें",
     linkCopied: "लिंक कॉपी हो गया!",
     contactSavedMsg: "कल्याण फाउंडेशन कॉन्टैक्ट कार्ड सेव हो गया!",
-    rightsReserved: "© 2024 कल्याण फाउंडेशन. सर्वाधिकार सुरक्षित."
+    rightsReserved: "© 2024 कल्याण फाउंडेशन. सर्वाधिकार सुरक्षित.",
+    
+    // Receipt Modal & PDF Generator
+    receiptModalTitle: "80G दान रसीद और व्हाट्सएप",
+    receiptModalSub: "आधिकारिक 80G टैक्स रसीद PDF डाउनलोड करने और व्हाट्सएप पर विवरण भेजने के लिए फॉर्म भरें",
+    tabDetails: "दाता विवरण",
+    tabPreview: "आधिकारिक रसीद पूर्वावलोकन",
+    donorNameLabel: "दाता का पूरा नाम",
+    donorPhoneLabel: "मोबाइल / व्हाट्सएप नंबर",
+    donorEmailLabel: "ईमेल पता",
+    donorAddressLabel: "पता, शहर एवं पिनकोड",
+    donorPanLabel: "पैन नंबर (80G कर छूट हेतु)",
+    donorAadhaarLabel: "आधार नंबर (वैकल्पिक)",
+    payModeLabel: "भुगतान का माध्यम",
+    payUtrLabel: "यूटीआर / ट्रांजैक्शन नंबर / चेक नं.",
+    modeBankTransfer: "बैंक ट्रांसफर (NEFT / RTGS / IMPS)",
+    modeUpi: "UPI / QR / GPay / PhonePe / Paytm",
+    modeCheque: "चेक / डीडी",
+    modeCash: "नकद / ऐच्छिक जमा",
+    downloadPdfBtn: "PDF रसीद डाउनलोड करें",
+    sendWhatsappBtn: "व्हाट्सएप पर विवरण भेजें",
+    downloadAndSendBtn: "PDF डाउनलोड करें और व्हाट्सएप भेजें",
+    printReceiptBtn: "रसीद प्रिंट करें",
+    receiptDownloaded: "आधिकारिक 80G रसीद PDF सफलतापूर्वक डाउनलोड हो गई है!"
   }
 };

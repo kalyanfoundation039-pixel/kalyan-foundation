@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const donateBtnLabel = document.getElementById('donateBtnLabel');
         if (donateBtnLabel && selectedAmount > 0) {
             if (lang === 'gu') {
-                donateBtnLabel.textContent = `₹${selectedAmount.toLocaleString('en-IN')} WhatsApp દ્વારા દાન કરો`;
+                donateBtnLabel.textContent = `₹${selectedAmount.toLocaleString('en-IN')} દાન & PDF પાવતી (WhatsApp)`;
             } else if (lang === 'hi') {
-                donateBtnLabel.textContent = `₹${selectedAmount.toLocaleString('en-IN')} व्हाट्सएप द्वारा दान करें`;
+                donateBtnLabel.textContent = `₹${selectedAmount.toLocaleString('en-IN')} दान & PDF रसीद (व्हाट्सएप)`;
             } else {
-                donateBtnLabel.textContent = `Donate ₹${selectedAmount.toLocaleString('en-IN')} via WhatsApp`;
+                donateBtnLabel.textContent = `Donate ₹${selectedAmount.toLocaleString('en-IN')} & Get 80G PDF Receipt`;
             }
         }
     }
@@ -269,15 +269,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Donation Widget Logic with Manual Price Input & Quick Chips
+     * Donation Widget & 80G Receipt Generator Logic
      */
     function setupDonationWidget() {
         const amountChips = document.querySelectorAll('.amount-chip');
         const manualAmountInput = document.getElementById('manualAmountInput');
         const purposeSelect = document.getElementById('donationPurpose');
         const donateWhatsAppBtn = document.getElementById('donateWhatsAppBtn');
+        const openReceiptModalBtn = document.getElementById('openReceiptModalBtn');
         const donateBtnLabel = document.getElementById('donateBtnLabel');
-        const payUpiBtn = document.getElementById('payUpiBtn');
 
         function updateDonateButtonText() {
             if (!donateBtnLabel) return;
@@ -285,11 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const dict = translations[currentLang] || translations.en;
             if (amt > 0) {
                 if (currentLang === 'gu') {
-                    donateBtnLabel.textContent = `₹${amt.toLocaleString('en-IN')} WhatsApp દ્વારા દાન કરો`;
+                    donateBtnLabel.textContent = `₹${amt.toLocaleString('en-IN')} દાન & PDF પાવતી (WhatsApp)`;
                 } else if (currentLang === 'hi') {
-                    donateBtnLabel.textContent = `₹${amt.toLocaleString('en-IN')} व्हाट्सएप द्वारा दान करें`;
+                    donateBtnLabel.textContent = `₹${amt.toLocaleString('en-IN')} दान & PDF रसीद (व्हाट्सएप)`;
                 } else {
-                    donateBtnLabel.textContent = `Donate ₹${amt.toLocaleString('en-IN')} via WhatsApp`;
+                    donateBtnLabel.textContent = `Donate ₹${amt.toLocaleString('en-IN')} & Get 80G PDF Receipt`;
                 }
             } else {
                 donateBtnLabel.textContent = dict.donateWhatsAppBtn || 'Donate via WhatsApp';
@@ -306,7 +306,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (manualAmountInput) {
                     manualAmountInput.value = amt;
                 }
+                const modalAmtInput = document.getElementById('modalDonationAmount');
+                if (modalAmtInput) modalAmtInput.value = amt;
                 updateDonateButtonText();
+                updateReceiptPreview();
             });
         });
 
@@ -325,30 +328,441 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                const modalAmtInput = document.getElementById('modalDonationAmount');
+                if (modalAmtInput) modalAmtInput.value = val;
+
                 updateDonateButtonText();
+                updateReceiptPreview();
+            });
+        }
+
+        // Sync cause select
+        if (purposeSelect) {
+            purposeSelect.addEventListener('change', () => {
+                const modalCause = document.getElementById('modalDonationCause');
+                if (modalCause) {
+                    const selText = purposeSelect.options[purposeSelect.selectedIndex].text;
+                    // match or set
+                    modalCause.value = selText;
+                }
+                updateReceiptPreview();
             });
         }
 
         // Initialize button text
         updateDonateButtonText();
 
+        // Main Donate Button opens Receipt & WhatsApp Modal
         if (donateWhatsAppBtn) {
             donateWhatsAppBtn.addEventListener('click', () => {
-                let amt = selectedAmount;
-                if (manualAmountInput) {
-                    amt = parseInt(manualAmountInput.value) || selectedAmount;
-                }
-                const purpose = purposeSelect ? purposeSelect.options[purposeSelect.selectedIndex].text : 'General NGO Donation';
-
-                let msg = `*KALYAN FOUNDATION - Donation Intent*\n\n`;
-                msg += `💰 *Amount:* ₹${amt ? amt.toLocaleString('en-IN') : 'Voluntary Amount'}\n`;
-                msg += `🎯 *Purpose:* ${purpose}\n\n`;
-                msg += `Namaste, I want to contribute to Kalyan Foundation. Please share bank account details / official UPI QR code so I can transfer funds and receive the 80G tax donation receipt.\n\n`;
-                msg += `_Thank you for your noble humanitarian service._`;
-
-                openWhatsApp(msg);
+                openDonationReceiptModal();
             });
         }
+
+        // Direct Download 80G Receipt Button opens Modal in Preview or Form tab
+        if (openReceiptModalBtn) {
+            openReceiptModalBtn.addEventListener('click', () => {
+                openDonationReceiptModal();
+            });
+        }
+
+        // Setup Receipt Modal Logic
+        setupReceiptModal();
+    }
+
+    /**
+     * Setup 80G Donation Receipt Modal, Live Sync, Tabs and Download
+     */
+    function setupReceiptModal() {
+        const modal = document.getElementById('donationReceiptModal');
+        const closeBtn = document.getElementById('closeReceiptModal');
+        const tabs = document.querySelectorAll('.receipt-tab-btn');
+        const formInputs = document.querySelectorAll('#receiptDonorForm input, #receiptDonorForm select');
+        
+        // Tab Switcher
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTabId = btn.dataset.tab;
+                tabs.forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+
+                document.querySelectorAll('.receipt-tab-content').forEach(content => {
+                    if (content.id === targetTabId) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+
+                // Update receipt preview whenever preview tab is opened
+                if (targetTabId === 'receiptPreviewTab') {
+                    updateReceiptPreview();
+                }
+            });
+        });
+
+        // Close Modal Handlers
+        if (closeBtn && modal) {
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+        }
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        // Live input sync
+        formInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                updateReceiptPreview();
+            });
+            input.addEventListener('change', () => {
+                updateReceiptPreview();
+            });
+        });
+
+        // Modal Action Buttons
+        const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
+        const sendWhatsAppBtn = document.getElementById('sendWhatsAppReceiptBtn');
+        const printBtn = document.getElementById('printReceiptDirectBtn');
+
+        if (comboBtn) {
+            comboBtn.addEventListener('click', () => {
+                updateReceiptPreview();
+                generateReceiptPDF(() => {
+                    setTimeout(() => {
+                        sendReceiptToWhatsApp();
+                    }, 800);
+                });
+            });
+        }
+
+        if (downloadPdfBtn) {
+            downloadPdfBtn.addEventListener('click', () => {
+                updateReceiptPreview();
+                generateReceiptPDF();
+            });
+        }
+
+        if (sendWhatsAppBtn) {
+            sendWhatsAppBtn.addEventListener('click', () => {
+                updateReceiptPreview();
+                sendReceiptToWhatsApp();
+            });
+        }
+
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                updateReceiptPreview();
+                window.print();
+            });
+        }
+
+        // Initialize default dates and preview
+        initReceiptDefaultValues();
+    }
+
+    /**
+     * Open Receipt Modal with synced amount and cause
+     */
+    function openDonationReceiptModal() {
+        const modal = document.getElementById('donationReceiptModal');
+        if (!modal) return;
+
+        const manualAmountInput = document.getElementById('manualAmountInput');
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+        const purposeSelect = document.getElementById('donationPurpose');
+        const modalCause = document.getElementById('modalDonationCause');
+
+        if (manualAmountInput && modalAmtInput) {
+            modalAmtInput.value = parseInt(manualAmountInput.value) || selectedAmount || 1000;
+        }
+
+        if (purposeSelect && modalCause) {
+            const curVal = purposeSelect.value;
+            if (curVal === 'welfare') modalCause.value = 'Social Welfare & Food Relief';
+            else if (curVal === 'education') modalCause.value = 'Child Education Support';
+            else if (curVal === 'health') modalCause.value = 'Health & Medical Camp';
+            else if (curVal === 'environment') modalCause.value = 'Environment & Tree Plantation';
+            else modalCause.value = 'Earmarked Fund';
+        }
+
+        updateReceiptPreview();
+        modal.classList.add('active');
+    }
+
+    /**
+     * Set Initial Default Values for Receipt
+     */
+    function initReceiptDefaultValues() {
+        const donorPayDate = document.getElementById('donorPayDate');
+        if (donorPayDate) {
+            const today = new Date().toISOString().split('T')[0];
+            donorPayDate.value = today;
+        }
+
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+        if (modalAmtInput && !modalAmtInput.value) {
+            modalAmtInput.value = selectedAmount || 1000;
+        }
+
+        updateReceiptPreview();
+    }
+
+    /**
+     * Real-time Sync of Receipt Preview Template with Form Data
+     */
+    function updateReceiptPreview() {
+        const donorName = document.getElementById('donorName')?.value.trim() || 'PATEL DIVYABEN BABUBHAI';
+        const donorPhone = document.getElementById('donorPhone')?.value.trim() || '9099827434';
+        const donorEmail = document.getElementById('donorEmail')?.value.trim() || 'divya_abdin@yahoo.co.in';
+        const donorAddress = document.getElementById('donorAddress')?.value.trim() || '64,SUMIN PARK, G.D. HIGHSCHOOL,SAIJPUR, AHEMDABAD..382345';
+        const donorPan = document.getElementById('donorPan')?.value.trim().toUpperCase() || 'ARYPP3355J';
+        const donorAadhaar = document.getElementById('donorAadhaar')?.value.trim() || '722333031217';
+        
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+        const amountNum = parseInt(modalAmtInput?.value) || selectedAmount || 1000;
+        const amountWords = numberToIndianWords(amountNum);
+
+        const payModeSelect = document.getElementById('donorPayMode');
+        const payMode = payModeSelect ? payModeSelect.options[payModeSelect.selectedIndex].text.split('(')[0].trim() : 'Bank Transfer';
+
+        const donorUtr = document.getElementById('donorUtr')?.value.trim() || 'UTR NO/RRN .506211287723';
+        
+        const donorPayDateInput = document.getElementById('donorPayDate')?.value;
+        const formattedDate = donorPayDateInput ? formatDateToDDMMYYYY(donorPayDateInput) : getFormattedToday();
+        
+        const causeSelect = document.getElementById('modalDonationCause');
+        const causeText = causeSelect ? causeSelect.options[causeSelect.selectedIndex].text.split('(')[0].trim() : 'Earmarked Fund';
+
+        const fy = getCurrentFinancialYear();
+        const receiptNo = '5'; // Standard reference index or dynamic
+
+        // Update DOM elements in receipt preview sheet
+        setText('rPrintNo', receiptNo);
+        setText('rPrintFY', fy);
+        setText('rPrintDate', formattedDate);
+        setText('rPrintName', donorName);
+        setText('rPrintAddress', donorAddress);
+        setText('rPrintTel', donorPhone);
+        setText('rPrintEmail', donorEmail);
+        setText('rPrintPan', donorPan);
+        setText('rPrintAadhaar', donorAadhaar);
+        setText('rPrintWords', amountWords);
+        setText('rPrintAccount', 'Earmarked Fund');
+        setText('rPrintFor', causeText);
+        setText('rPrintBy', payMode);
+        setText('rPrintPayDate', formattedDate);
+        setText('rPrintPaymentDetails', donorUtr);
+        setText('rPrintAmountNum', `${amountNum}/-`);
+        setText('rPrintVerifDate', formattedDate);
+    }
+
+    function setText(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    }
+
+    /**
+     * Convert Number to Indian Currency Words Format (e.g. 100000 -> One Lakhs Only / Rupees)
+     */
+    function numberToIndianWords(amount) {
+        const num = Math.floor(Number(amount));
+        if (isNaN(num) || num <= 0) return 'Zero Rupees Only';
+
+        const single = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+        const double = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function convertChunk(n) {
+            let str = '';
+            if (n >= 100) {
+                str += single[Math.floor(n / 100)] + ' Hundred ';
+                n %= 100;
+            }
+            if (n >= 20) {
+                str += double[Math.floor(n / 10)] + ' ';
+                n %= 10;
+            }
+            if (n > 0) {
+                str += single[n] + ' ';
+            }
+            return str.trim();
+        }
+
+        let words = '';
+        const crore = Math.floor(num / 10000000);
+        const lakh = Math.floor((num % 10000000) / 100000);
+        const thousand = Math.floor((num % 100000) / 1000);
+        const remainder = num % 1000;
+
+        if (crore > 0) {
+            words += convertChunk(crore) + ' Crore ';
+        }
+        if (lakh > 0) {
+            words += convertChunk(lakh) + ' Lakhs ';
+        }
+        if (thousand > 0) {
+            words += convertChunk(thousand) + ' Thousand ';
+        }
+        if (remainder > 0) {
+            words += convertChunk(remainder) + ' ';
+        }
+
+        return words.trim() + ' Only';
+    }
+
+    /**
+     * Date Formatting Utilities
+     */
+    function getFormattedToday() {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function formatDateToDDMMYYYY(dateStr) {
+        if (!dateStr) return getFormattedToday();
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateStr;
+    }
+
+    function getCurrentFinancialYear() {
+        const today = new Date();
+        const curYear = today.getFullYear();
+        const curMonth = today.getMonth() + 1;
+        if (curMonth >= 4) {
+            return `${curYear}-${curYear + 1}`;
+        } else {
+            return `${curYear - 1}-${curYear}`;
+        }
+    }
+
+    /**
+     * Generate & Download Official 80G Receipt PDF via html2pdf
+     */
+    function generateReceiptPDF(callback) {
+        const element = document.getElementById('receiptDocumentToPrint');
+        if (!element) {
+            if (callback) callback();
+            return;
+        }
+
+        const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
+        const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
+        const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
+        const filename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
+
+        const opt = {
+            margin: [8, 6, 8, 6],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true,
+                scrollX: 0,
+                scrollY: 0,
+                backgroundColor: '#ffffff'
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
+        const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
+
+        if (downloadPdfBtn) downloadPdfBtn.disabled = true;
+        if (comboBtn) comboBtn.disabled = true;
+
+        showToast('Generating official 80G PDF receipt...');
+
+        if (typeof html2pdf !== 'undefined') {
+            html2pdf().set(opt).from(element).save().then(() => {
+                if (downloadPdfBtn) downloadPdfBtn.disabled = false;
+                if (comboBtn) comboBtn.disabled = false;
+                const dict = translations[currentLang] || translations.en;
+                showToast(dict.receiptDownloaded || 'Receipt PDF downloaded successfully!');
+                if (callback) callback();
+            }).catch(err => {
+                console.error('PDF error:', err);
+                if (downloadPdfBtn) downloadPdfBtn.disabled = false;
+                if (comboBtn) comboBtn.disabled = false;
+                window.print();
+                if (callback) callback();
+            });
+        } else {
+            // Fallback to print
+            if (downloadPdfBtn) downloadPdfBtn.disabled = false;
+            if (comboBtn) comboBtn.disabled = false;
+            window.print();
+            if (callback) callback();
+        }
+    }
+
+    /**
+     * Forward Complete Structured Receipt & Donor Details to WhatsApp
+     */
+    function sendReceiptToWhatsApp() {
+        const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Valued Donor';
+        const donorPhone = document.getElementById('donorPhone')?.value.trim() || document.getElementById('rPrintTel')?.textContent || '';
+        const donorEmail = document.getElementById('donorEmail')?.value.trim() || document.getElementById('rPrintEmail')?.textContent || '';
+        const donorAddress = document.getElementById('donorAddress')?.value.trim() || document.getElementById('rPrintAddress')?.textContent || '';
+        const donorPan = document.getElementById('donorPan')?.value.trim().toUpperCase() || document.getElementById('rPrintPan')?.textContent || 'N/A';
+        const donorAadhaar = document.getElementById('donorAadhaar')?.value.trim() || document.getElementById('rPrintAadhaar')?.textContent || 'N/A';
+        
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+        const amountNum = parseInt(modalAmtInput?.value) || selectedAmount || 1000;
+        const amountWords = numberToIndianWords(amountNum);
+
+        const payModeSelect = document.getElementById('donorPayMode');
+        const payMode = payModeSelect ? payModeSelect.options[payModeSelect.selectedIndex].text : 'Bank Transfer';
+        const payUtr = document.getElementById('donorUtr')?.value.trim() || document.getElementById('rPrintPaymentDetails')?.textContent || 'Online Transfer';
+        
+        const payDate = document.getElementById('rPrintDate')?.textContent || getFormattedToday();
+        const cause = document.getElementById('modalDonationCause')?.value || 'Earmarked Fund / Social Welfare';
+        const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
+        const fy = document.getElementById('rPrintFY')?.textContent || getCurrentFinancialYear();
+
+        let msg = `*==============================*\n`;
+        msg += `*KALYAN FOUNDATION - 80G DONATION RECEIPT*\n`;
+        msg += `*==============================*\n\n`;
+        msg += `📋 *Receipt No:* ${receiptNo} | *F.Y.:* ${fy}\n`;
+        msg += `📅 *Receipt Date:* ${payDate}\n`;
+        msg += `💰 *Donation Amount:* ₹${amountNum.toLocaleString('en-IN')}/-\n`;
+        msg += `📝 *In Words:* ${amountWords}\n`;
+        msg += `🎯 *Cause / Purpose:* ${cause}\n\n`;
+
+        msg += `👤 *DONOR DETAILS:*\n`;
+        msg += `• *Name:* ${donorName}\n`;
+        if (donorPhone) msg += `• *Phone:* ${donorPhone}\n`;
+        if (donorEmail) msg += `• *Email:* ${donorEmail}\n`;
+        if (donorAddress) msg += `• *Address:* ${donorAddress}\n`;
+        if (donorPan && donorPan !== 'N/A') msg += `• *Donor PAN (80G):* ${donorPan}\n`;
+        if (donorAadhaar && donorAadhaar !== 'N/A') msg += `• *Aadhaar No:* ${donorAadhaar}\n\n`;
+
+        msg += `💳 *PAYMENT INFO:*\n`;
+        msg += `• *Payment Mode:* ${payMode}\n`;
+        msg += `• *UTR / Ref No:* ${payUtr}\n`;
+        msg += `• *Payment Date:* ${payDate}\n\n`;
+
+        msg += `🏛️ *NGO 80G DETAILS:*\n`;
+        msg += `• *80G Regn No:* AADTK8237AF20241 (Dated: 11/06/2024)\n`;
+        msg += `• *Trust Regd No:* GUJ/20311/AHEMDABAD\n`;
+        msg += `• *Trust PAN:* AADTK8237A | *CSR REG:* 00077225\n\n`;
+
+        msg += `_Namaste Kalyan Foundation Team, I have contributed to your noble initiative. Please find my donor details above and confirm receipt for 80G income tax exemption certificate._\n\n`;
+        msg += `_Sent via Kalyan Foundation NFC Digital Card_`;
+
+        openWhatsApp(msg);
     }
 
     /**
