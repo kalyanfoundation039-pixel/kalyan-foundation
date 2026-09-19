@@ -589,37 +589,43 @@
 
             <!-- Tab 1: Donor Information Form -->
             <div class="receipt-tab-content active" id="donorFormTab">
+                <!-- Validation Status Notification Banner -->
+                <div class="form-validation-status" id="formValidationStatus">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="formStatusText" data-i18n="formFillNotice">⚠️ Please fill all mandatory fields (*) to enable PDF download</span>
+                </div>
+
                 <form id="receiptDonorForm" class="donor-input-form">
                     <div class="form-row-2">
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="donorNameLabel">Donor Full Name / Trust Name *</label>
+                            <label class="form-field-label" data-i18n="donorNameLabel">Donor Full Name / Trust Name <span class="req-star">*</span></label>
                             <input type="text" id="donorName" class="modal-input" placeholder="e.g. PATEL DIVYABEN BABUBHAI" required>
                         </div>
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="donorPhoneLabel">Mobile / WhatsApp Number *</label>
-                            <input type="tel" id="donorPhone" class="modal-input" placeholder="e.g. 9099827434" required>
+                            <label class="form-field-label" data-i18n="donorPhoneLabel">Mobile / WhatsApp Number <span class="req-star">*</span></label>
+                            <input type="tel" id="donorPhone" class="modal-input" placeholder="e.g. 9099827434" required maxlength="12">
                         </div>
                     </div>
 
                     <div class="form-row-2">
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="donorEmailLabel">Email Address</label>
+                            <label class="form-field-label" data-i18n="donorEmailLabel">Email Address (Optional)</label>
                             <input type="email" id="donorEmail" class="modal-input" placeholder="e.g. donor@example.com">
                         </div>
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="donorPanLabel">Donor PAN (For 80G Tax Exemption)</label>
-                            <input type="text" id="donorPan" class="modal-input pan-input" placeholder="e.g. ARYPP3355J" maxlength="10" style="text-transform: uppercase;">
+                            <label class="form-field-label" data-i18n="donorPanLabel">Donor PAN (For 80G Tax Exemption) <span class="req-star">*</span></label>
+                            <input type="text" id="donorPan" class="modal-input pan-input" placeholder="e.g. ARYPP3355J" maxlength="10" style="text-transform: uppercase;" required>
                         </div>
                     </div>
 
                     <div class="form-field-group">
-                        <label class="form-field-label" data-i18n="donorAddressLabel">Full Address (with City & Pincode)</label>
-                        <input type="text" id="donorAddress" class="modal-input" placeholder="e.g. 64, SUMIN PARK, G.D. HIGHSCHOOL, SAIJPUR, AHMEDABAD..382345">
+                        <label class="form-field-label" data-i18n="donorAddressLabel">Full Address (with City & Pincode) <span class="req-star">*</span></label>
+                        <input type="text" id="donorAddress" class="modal-input" placeholder="e.g. 64, SUMIN PARK, G.D. HIGHSCHOOL, SAIJPUR, AHMEDABAD..382345" required>
                     </div>
 
                     <div class="form-row-3">
                         <div class="form-field-group">
-                            <label class="form-field-label">Donation Amount (₹) *</label>
+                            <label class="form-field-label">Donation Amount (₹) <span class="req-star">*</span></label>
                             <input type="number" id="modalDonationAmount" class="modal-input" min="1" step="50" required>
                         </div>
                         <div class="form-field-group">
@@ -627,8 +633,8 @@
                             <input type="text" id="donorAadhaar" class="modal-input" placeholder="e.g. 722333031217" maxlength="14">
                         </div>
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="payModeLabel">Payment Mode</label>
-                            <select id="donorPayMode" class="modal-input modal-select">
+                            <label class="form-field-label" data-i18n="payModeLabel">Payment Mode <span class="req-star">*</span></label>
+                            <select id="donorPayMode" class="modal-input modal-select" required>
                                 <option value="Bank Transfer">Bank Transfer (NEFT/RTGS/IMPS)</option>
                                 <option value="UPI / QR">UPI (GPay / PhonePe / Paytm / BHIM)</option>
                                 <option value="Cheque / DD">Cheque / Demand Draft</option>
@@ -639,7 +645,7 @@
 
                     <div class="form-row-2">
                         <div class="form-field-group">
-                            <label class="form-field-label" data-i18n="payUtrLabel">UTR / Transaction Ref No. / Cheque No.</label>
+                            <label class="form-field-label" data-i18n="payUtrLabel">UTR / Transaction Ref No. (Optional)</label>
                             <input type="text" id="donorUtr" class="modal-input" placeholder="e.g. UTR NO/RRN .506211287723">
                         </div>
                         <div class="form-field-group">
@@ -657,6 +663,15 @@
                             <option value="Health & Medical Camp">Free Medical & Health Camps (આરોગ્ય કેમ્પ)</option>
                             <option value="Environment & Tree Plantation">Tree Plantation & Nature Care (વૃક્ષારોપણ)</option>
                         </select>
+                    </div>
+
+                    <!-- Step 1 to Step 2 Transition Button -->
+                    <div class="form-proceed-wrap">
+                        <button type="button" class="btn-proceed-preview" id="proceedToPreviewBtn">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verify Details & Preview Receipt</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </form>
             </div>

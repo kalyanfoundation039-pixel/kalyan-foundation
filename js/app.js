@@ -415,13 +415,43 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Live input sync
+        // Setup Proceed to Preview Button
+        const proceedBtn = document.getElementById('proceedToPreviewBtn');
+        if (proceedBtn) {
+            proceedBtn.addEventListener('click', () => {
+                const isValid = validateDonorForm(true);
+                if (isValid) {
+                    // Switch to Preview Tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    const previewTabBtn = document.getElementById('previewTabBtn');
+                    if (previewTabBtn) previewTabBtn.classList.add('active');
+
+                    document.querySelectorAll('.receipt-tab-content').forEach(content => {
+                        if (content.id === 'receiptPreviewTab') {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+
+                    updateReceiptPreview();
+                    showToast('✅ Details verified! You can now download your official 80G receipt.');
+                }
+            });
+        }
+
+        // Live input sync & validation
         formInputs.forEach(input => {
-            input.addEventListener('input', () => {
+            input.addEventListener('input', (e) => {
+                if (e.target.classList.contains('input-invalid')) {
+                    e.target.classList.remove('input-invalid');
+                }
                 updateReceiptPreview();
+                validateDonorForm(false);
             });
             input.addEventListener('change', () => {
                 updateReceiptPreview();
+                validateDonorForm(false);
             });
         });
 
@@ -433,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (comboBtn) {
             comboBtn.addEventListener('click', () => {
+                if (!validateDonorForm(true)) return;
                 updateReceiptPreview();
                 generateReceiptPDF(() => {
                     setTimeout(() => {
@@ -444,6 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (downloadPdfBtn) {
             downloadPdfBtn.addEventListener('click', () => {
+                if (!validateDonorForm(true)) return;
                 updateReceiptPreview();
                 generateReceiptPDF();
             });
@@ -451,6 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sendWhatsAppBtn) {
             sendWhatsAppBtn.addEventListener('click', () => {
+                if (!validateDonorForm(true)) return;
                 updateReceiptPreview();
                 sendReceiptToWhatsApp();
             });
@@ -458,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (printBtn) {
             printBtn.addEventListener('click', () => {
+                if (!validateDonorForm(true)) return;
                 updateReceiptPreview();
                 window.print();
             });
@@ -468,11 +502,131 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * Validate Mandatory Donor Form Fields
+     * Mandatory: Donor Name, Phone Number, Full Address, PAN Number, Donation Amount
+     */
+    function validateDonorForm(showErrors = false) {
+        const donorName = document.getElementById('donorName');
+        const donorPhone = document.getElementById('donorPhone');
+        const donorAddress = document.getElementById('donorAddress');
+        const donorPan = document.getElementById('donorPan');
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+
+        const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
+        const sendWhatsAppBtn = document.getElementById('sendWhatsAppReceiptBtn');
+        const printBtn = document.getElementById('printReceiptDirectBtn');
+
+        const statusBanner = document.getElementById('formValidationStatus');
+        const statusText = document.getElementById('formStatusText');
+        const dict = translations[currentLang] || translations.en;
+
+        const nameVal = donorName?.value.trim() || '';
+        const phoneVal = donorPhone?.value.trim() || '';
+        const addressVal = donorAddress?.value.trim() || '';
+        const panVal = donorPan?.value.trim() || '';
+        const amtVal = parseInt(modalAmtInput?.value) || 0;
+
+        let isValid = true;
+        let firstInvalidField = null;
+
+        // 1. Name Check (Min 2 chars)
+        if (!nameVal || nameVal.length < 2) {
+            isValid = false;
+            if (showErrors && donorName) {
+                donorName.classList.add('input-invalid');
+                if (!firstInvalidField) firstInvalidField = donorName;
+            }
+        }
+
+        // 2. Phone Check (Min 10 digits)
+        if (!phoneVal || phoneVal.replace(/[^0-9]/g, '').length < 10) {
+            isValid = false;
+            if (showErrors && donorPhone) {
+                donorPhone.classList.add('input-invalid');
+                if (!firstInvalidField) firstInvalidField = donorPhone;
+            }
+        }
+
+        // 3. Address Check (Min 3 chars)
+        if (!addressVal || addressVal.length < 3) {
+            isValid = false;
+            if (showErrors && donorAddress) {
+                donorAddress.classList.add('input-invalid');
+                if (!firstInvalidField) firstInvalidField = donorAddress;
+            }
+        }
+
+        // 4. PAN Check (Min 5 chars)
+        if (!panVal || panVal.length < 5) {
+            isValid = false;
+            if (showErrors && donorPan) {
+                donorPan.classList.add('input-invalid');
+                if (!firstInvalidField) firstInvalidField = donorPan;
+            }
+        }
+
+        // 5. Amount Check (> 0)
+        if (amtVal <= 0) {
+            isValid = false;
+            if (showErrors && modalAmtInput) {
+                modalAmtInput.classList.add('input-invalid');
+                if (!firstInvalidField) firstInvalidField = modalAmtInput;
+            }
+        }
+
+        // Update Action Buttons Enabled/Disabled State
+        const buttons = [comboBtn, downloadPdfBtn, sendWhatsAppBtn, printBtn];
+        buttons.forEach(btn => {
+            if (btn) {
+                btn.disabled = !isValid;
+                if (!isValid) {
+                    btn.classList.add('is-disabled');
+                } else {
+                    btn.classList.remove('is-disabled');
+                }
+            }
+        });
+
+        // Update Status Notification Banner
+        if (statusBanner && statusText) {
+            if (isValid) {
+                statusBanner.className = 'form-validation-status status-valid';
+                statusBanner.innerHTML = `<i class="fas fa-check-circle"></i> <span>${dict.formValidNotice || '✅ All mandatory details filled! You can now download your receipt.'}</span>`;
+            } else {
+                statusBanner.className = 'form-validation-status';
+                statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> <span>${dict.formFillNotice || '⚠️ Please fill all mandatory fields (*) to enable PDF download'}</span>`;
+            }
+        }
+
+        if (!isValid && showErrors) {
+            showToast(dict.errFillRequired || 'Please fill all required (*) fields before downloading');
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+            }
+        }
+
+        return isValid;
+    }
+
+    /**
      * Open Receipt Modal with synced amount and cause
      */
     function openDonationReceiptModal() {
         const modal = document.getElementById('donationReceiptModal');
         if (!modal) return;
+
+        // Always start on Donor Form Tab (Step 1)
+        const tabs = document.querySelectorAll('.receipt-tab-btn');
+        tabs.forEach(t => {
+            if (t.dataset.tab === 'donorFormTab') t.classList.add('active');
+            else t.classList.remove('active');
+        });
+
+        document.querySelectorAll('.receipt-tab-content').forEach(content => {
+            if (content.id === 'donorFormTab') content.classList.add('active');
+            else content.classList.remove('active');
+        });
 
         const manualAmountInput = document.getElementById('manualAmountInput');
         const modalAmtInput = document.getElementById('modalDonationAmount');
@@ -493,6 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateReceiptPreview();
+        validateDonorForm(false);
         modal.classList.add('active');
     }
 
@@ -512,6 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateReceiptPreview();
+        validateDonorForm(false);
     }
 
     /**

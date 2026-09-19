@@ -105,7 +105,10 @@ const translations = {
     sendWhatsappBtn: "Send Details to WhatsApp",
     downloadAndSendBtn: "Download PDF & Open WhatsApp",
     printReceiptBtn: "Print Receipt",
-    receiptDownloaded: "Official 80G Receipt PDF downloaded successfully!"
+    receiptDownloaded: "Official 80G Receipt PDF downloaded successfully!",
+    formFillNotice: "⚠️ Please fill all mandatory fields (*) to enable PDF download",
+    formValidNotice: "✅ Details completed! Ready to download official 80G receipt",
+    errFillRequired: "Please fill all required fields (*) before downloading"
   },
   gu: {
     orgName: "કલ્યાણ ફાઉન્ડેશન",
@@ -212,7 +215,10 @@ const translations = {
     sendWhatsappBtn: "WhatsApp પર વિગત મોકલો",
     downloadAndSendBtn: "PDF ડાઉનલોડ કરો & WhatsApp ખોલો",
     printReceiptBtn: "પ્રિન્ટ પાવતી",
-    receiptDownloaded: "ઓફિશિયલ 80G પાવતી PDF સફળતાપૂર્વક ડાઉનલોડ થઈ ગઈ છે!"
+    receiptDownloaded: "ઓફિશિયલ 80G પાવતી PDF સફળતાપૂર્વક ડાઉનલોડ થઈ ગઈ છે!",
+    formFillNotice: "⚠️ PDF ડાઉનલોડ કરવા માટે બધી જરૂરી વિગતો (*) ભરો",
+    formValidNotice: "✅ વિગતો પૂર્ણ થઈ ગઈ છે! હવે તમે 80G પાવતી ડાઉનલોડ કરી શકો છો",
+    errFillRequired: "કૃપા કરીને પાવતી ડાઉનલોડ કરતાં પહેલાં તમામ જરૂરી (*) વિગતો ભરો"
   },
   hi: {
     orgName: "कल्याण फाउंडेशन",
@@ -319,6 +325,9 @@ const translations = {
     sendWhatsappBtn: "व्हाट्सएप पर विवरण भेजें",
     downloadAndSendBtn: "PDF डाउनलोड करें और व्हाट्सएप भेजें",
     printReceiptBtn: "रसीद प्रिंट करें",
-    receiptDownloaded: "आधिकारिक 80G रसीद PDF सफलतापूर्वक डाउनलोड हो गई है!"
+    receiptDownloaded: "आधिकारिक 80G रसीद PDF सफलतापूर्वक डाउनलोड हो गई है!",
+    formFillNotice: "⚠️ PDF डाउनलोड करने के लिए सभी अनिवार्य विवरण (*) भरें",
+    formValidNotice: "✅ विवरण पूर्ण हो गए हैं! अब आप 80G रसीद डाउनलोड कर सकते हैं",
+    errFillRequired: "कृपया रसीद डाउनलोड करने से पहले सभी अनिवार्य (*) विवरण भरें"
   }
 };
