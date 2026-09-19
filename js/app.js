@@ -816,6 +816,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
         const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
         const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
+        const filename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
         const opt = {
             margin: [5, 5, 5, 5],
             filename: filename,
