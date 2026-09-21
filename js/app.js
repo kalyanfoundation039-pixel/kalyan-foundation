@@ -459,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
         const sendWhatsAppBtn = document.getElementById('sendWhatsAppReceiptBtn');
+        const sendEmailBtn = document.getElementById('sendEmailReceiptBtn');
         const printBtn = document.getElementById('printReceiptDirectBtn');
 
         if (comboBtn) {
@@ -468,6 +469,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 generateReceiptPDF(() => {
                     setTimeout(() => {
                         sendReceiptToWhatsApp();
+                        const donorEmail = document.getElementById('donorEmail')?.value.trim();
+                        if (donorEmail && donorEmail.includes('@')) {
+                            setTimeout(() => {
+                                sendReceiptToEmail(donorEmail);
+                            }, 1200);
+                        }
                     }, 800);
                 });
             });
@@ -486,6 +493,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!validateDonorForm(true)) return;
                 updateReceiptPreview();
                 sendReceiptToWhatsApp();
+            });
+        }
+
+        if (sendEmailBtn) {
+            sendEmailBtn.addEventListener('click', () => {
+                if (!validateDonorForm(true)) return;
+                updateReceiptPreview();
+                sendReceiptToEmail();
             });
         }
 
@@ -575,8 +590,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        const sendEmailBtn = document.getElementById('sendEmailReceiptBtn');
         // Update Action Buttons Enabled/Disabled State
-        const buttons = [comboBtn, downloadPdfBtn, sendWhatsAppBtn, printBtn];
+        const buttons = [comboBtn, downloadPdfBtn, sendWhatsAppBtn, sendEmailBtn, printBtn];
         buttons.forEach(btn => {
             if (btn) {
                 btn.disabled = !isValid;
@@ -1002,6 +1018,102 @@ document.addEventListener('DOMContentLoaded', () => {
         const encoded = encodeURIComponent(message);
         const url = `https://wa.me/${PHONE_NUMBER}?text=${encoded}`;
         window.open(url, '_blank');
+    }
+
+    /**
+     * Forward Complete Official 80G Receipt & Certificate Details to Donor Email
+     */
+    function sendReceiptToEmail(targetEmail) {
+        const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Valued Donor';
+        const donorPhone = document.getElementById('donorPhone')?.value.trim() || document.getElementById('rPrintTel')?.textContent || '';
+        const donorEmail = targetEmail || document.getElementById('donorEmail')?.value.trim() || document.getElementById('rPrintEmail')?.textContent || '';
+        const donorAddress = document.getElementById('donorAddress')?.value.trim() || document.getElementById('rPrintAddress')?.textContent || '';
+        const donorPan = document.getElementById('donorPan')?.value.trim().toUpperCase() || document.getElementById('rPrintPan')?.textContent || 'N/A';
+        const donorAadhaar = document.getElementById('donorAadhaar')?.value.trim() || document.getElementById('rPrintAadhaar')?.textContent || 'N/A';
+        
+        const modalAmtInput = document.getElementById('modalDonationAmount');
+        const amountNum = parseInt(modalAmtInput?.value) || selectedAmount || 1000;
+        const amountWords = numberToIndianWords(amountNum);
+
+        const payModeSelect = document.getElementById('donorPayMode');
+        const payMode = payModeSelect ? payModeSelect.options[payModeSelect.selectedIndex].text : 'Bank Transfer';
+        const payUtr = document.getElementById('donorUtr')?.value.trim() || document.getElementById('rPrintPaymentDetails')?.textContent || 'Online Transfer';
+        
+        const payDate = document.getElementById('rPrintDate')?.textContent || getFormattedToday();
+        const cause = document.getElementById('modalDonationCause')?.value || 'Earmarked Fund / Social Welfare';
+        const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
+        const fy = document.getElementById('rPrintFY')?.textContent || getCurrentFinancialYear();
+
+        if (!donorEmail || !donorEmail.includes('@')) {
+            showToast('⚠️ Please enter a valid Donor Email address in the form.');
+            const emailInput = document.getElementById('donorEmail');
+            if (emailInput) {
+                // Switch to Donor Form tab to enter email
+                const formTabBtn = document.querySelector('.receipt-tab-btn[data-tab="donorFormTab"]');
+                const formTab = document.getElementById('donorFormTab');
+                const previewTab = document.getElementById('receiptPreviewTab');
+                const previewTabBtn = document.getElementById('previewTabBtn');
+
+                if (formTab && formTabBtn) {
+                    if (previewTab) previewTab.classList.remove('active');
+                    if (previewTabBtn) previewTabBtn.classList.remove('active');
+                    formTab.classList.add('active');
+                    formTabBtn.classList.add('active');
+                }
+                emailInput.focus();
+                emailInput.classList.add('input-invalid');
+            }
+            return false;
+        }
+
+        const subject = `Official 80G Donation Receipt #${receiptNo} - Kalyan Foundation (${donorName})`;
+
+        let body = `Dear ${donorName},\n\n`;
+        body += `Namaste and heartfelt greetings from Kalyan Foundation!\n\n`;
+        body += `Thank you immensely for your generous contribution of Rs. ${amountNum.toLocaleString('en-IN')}/- (${amountWords}) towards "${cause}".\n\n`;
+        body += `Please find your official 80G tax exemption donation receipt summary below:\n\n`;
+        body += `========================================\n`;
+        body += `KALYAN FOUNDATION - 80G DONATION RECEIPT\n`;
+        body += `========================================\n\n`;
+        body += `📋 Receipt No: ${receiptNo} | Financial Year (F.Y.): ${fy}\n`;
+        body += `📅 Date of Receipt: ${payDate}\n\n`;
+        body += `👤 DONOR INFORMATION:\n`;
+        body += `--------------------\n`;
+        body += `• Donor Name: ${donorName}\n`;
+        if (donorPhone) body += `• Contact Phone: ${donorPhone}\n`;
+        body += `• Email Address: ${donorEmail}\n`;
+        if (donorAddress) body += `• Address: ${donorAddress}\n`;
+        if (donorPan && donorPan !== 'N/A') body += `• Donor PAN (80G Exemption): ${donorPan}\n`;
+        if (donorAadhaar && donorAadhaar !== 'N/A') body += `• Aadhaar No: ${donorAadhaar}\n`;
+        body += `\n`;
+        body += `💰 DONATION & PAYMENT DETAILS:\n`;
+        body += `-----------------------------\n`;
+        body += `• Amount: Rs. ${amountNum.toLocaleString('en-IN')}/-\n`;
+        body += `• In Words: ${amountWords}\n`;
+        body += `• Cause / Purpose: ${cause}\n`;
+        body += `• Payment Mode: ${payMode}\n`;
+        body += `• Transaction Ref / UTR No: ${payUtr}\n`;
+        body += `• Payment Date: ${payDate}\n\n`;
+        body += `🏛️ STATUTORY 80G TAX EXEMPTION DETAILS:\n`;
+        body += `--------------------------------------\n`;
+        body += `• 80G Regn No: AADTK8237AF20241 (Dated: 11/06/2024)\n`;
+        body += `• Section 10(23C) (vi) Regn No: AADTK8237AF20241\n`;
+        body += `• Trust Regd. No: GUJ/20311/AHEMDABAD\n`;
+        body += `• Trust PAN: AADTK8237A\n`;
+        body += `• CSR Reg Number: 00077225\n\n`;
+        body += `VERIFICATION:\n`;
+        body += `I, Jignesh Bhatt, President of Kalyan Foundation, solemnly declare that the certificate issued is correct, complete, and in accordance with the provisions of the Income Tax Act, 1961.\n\n`;
+        body += `With Gratitude,\n`;
+        body += `KALYAN FOUNDATION\n`;
+        body += `Bordipa, Nr. Ramjimandir, Bavla - 382220, Gujarat, India\n`;
+        body += `Phone: +91 99097 39390 | Email: kalyanfoundation039@gmail.com\n\n`;
+        body += `(Note: Please retain this email along with the downloaded PDF receipt for your income tax 80G deduction filing.)\n`;
+
+        const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        window.open(mailtoUrl, '_blank');
+        showToast(`📧 Official 80G receipt email drafted for ${donorEmail}!`);
+        return true;
     }
 
     /**

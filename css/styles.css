@@ -2100,23 +2100,23 @@ body {
 
 .actions-split-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1.3fr 0.8fr;
-  gap: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
 }
 
 .btn-action-secondary-pdf {
-  padding: 9px 10px;
+  padding: 9px 8px;
   background: #dc2626;
   color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   transition: var(--transition-fast);
 }
 
@@ -2125,18 +2125,18 @@ body {
 }
 
 .btn-action-secondary-wa {
-  padding: 9px 10px;
+  padding: 9px 8px;
   background: #25d366;
   color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   transition: var(--transition-fast);
 }
 
@@ -2144,19 +2144,39 @@ body {
   background: #1eb956;
 }
 
-.btn-action-secondary-print {
-  padding: 9px 10px;
-  background: var(--bg-surface-alt);
-  color: var(--text-main);
-  border: 1px solid var(--border-subtle);
+.btn-action-secondary-email {
+  padding: 9px 8px;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
+  transition: var(--transition-fast);
+}
+
+.btn-action-secondary-email:hover {
+  background: #0369a1;
+}
+
+.btn-action-secondary-print {
+  padding: 9px 8px;
+  background: var(--bg-surface-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   transition: var(--transition-fast);
 }
 
@@ -2170,10 +2190,12 @@ body {
 .btn-action-primary-combo:disabled,
 .btn-action-secondary-pdf:disabled,
 .btn-action-secondary-wa:disabled,
+.btn-action-secondary-email:disabled,
 .btn-action-secondary-print:disabled,
 .btn-action-primary-combo.is-disabled,
 .btn-action-secondary-pdf.is-disabled,
 .btn-action-secondary-wa.is-disabled,
+.btn-action-secondary-email.is-disabled,
 .btn-action-secondary-print.is-disabled {
   opacity: 0.42;
   cursor: not-allowed !important;
