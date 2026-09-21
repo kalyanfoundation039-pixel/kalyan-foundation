@@ -1115,40 +1115,9 @@ document.addEventListener('DOMContentLoaded', () => {
         body += `Phone: +91 99097 39390 | Email: kalyanfoundation039@gmail.com\n\n`;
         body += `(Note: Please retain this email along with the downloaded PDF receipt for your income tax 80G deduction filing.)\n`;
 
-        showToast(`⏳ Dispatching 80G Receipt email to ${donorEmail}...`);
+        showToast(`⏳ Preparing 80G Receipt email to ${donorEmail}...`);
 
-        let emailSentSuccessfully = false;
-
-        // 1. Direct Background Dispatch via FormSubmit hidden form (Bypasses all CORS blocks)
-        const hiddenForm = document.getElementById('hiddenEmailForm');
-        if (hiddenForm) {
-            const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-            setVal('fs_subject', subject);
-            setVal('fs_cc', donorEmail);
-            setVal('fs_name', donorName);
-            setVal('fs_email', donorEmail);
-            setVal('fs_phone', donorPhone || 'N/A');
-            setVal('fs_pan', donorPan);
-            setVal('fs_address', donorAddress);
-            setVal('fs_receipt', receiptNo);
-            setVal('fs_fy', fy);
-            setVal('fs_date', payDate);
-            setVal('fs_amount', `₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})`);
-            setVal('fs_cause', cause);
-            setVal('fs_paymode', payMode);
-            setVal('fs_utr', payUtr);
-            setVal('fs_summary', body);
-
-            try {
-                hiddenForm.submit();
-                emailSentSuccessfully = true;
-                showToast(`✅ 80G Receipt email dispatched to ${donorEmail} & Kalyan Foundation!`);
-            } catch (formErr) {
-                console.warn('Hidden form submit error:', formErr);
-            }
-        }
-
-        // 2. Parallel AJAX Fetch Dispatch
+        // Background AJAX Dispatch (Best effort)
         try {
             const formSubmitPayload = {
                 _subject: subject,
@@ -1188,11 +1157,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('FormSubmit AJAX attempt error:', fetchErr);
         }
 
-        // 2. EmailJS Background Send (if configured)
-        if (!emailSentSuccessfully && typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
+        // EmailJS Background Send (if configured)
+        if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
             try {
                 emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
+                emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
                     to_name: donorName,
                     to_email: donorEmail,
                     cc_email: 'kalyanfoundation039@gmail.com',
@@ -1205,24 +1174,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     utr: payUtr,
                     receipt_text: body
                 });
-                emailSentSuccessfully = true;
-                showToast(`✅ 80G Receipt email delivered to ${donorEmail}!`);
             } catch (emailErr) {
                 console.warn('EmailJS attempt error:', emailErr);
             }
         }
 
-        // 3. Fallback: Direct Web Gmail / Native Mail
-        if (!emailSentSuccessfully) {
-            const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(donorEmail)}&cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        // Guaranteed Direct 1-Click Dispatch: Open Gmail / Default Mail Client (To: Donor, CC: Kalyan Foundation)
+        const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(donorEmail)}&cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-            const gmailWindow = window.open(gmailComposeUrl, '_blank');
-            if (!gmailWindow || gmailWindow.closed || typeof gmailWindow.closed === 'undefined') {
-                window.location.href = mailtoUrl;
-            }
-            showToast(`📧 Receipt email prepared for ${donorEmail}!`);
+        const gmailWindow = window.open(gmailComposeUrl, '_blank');
+        if (!gmailWindow || gmailWindow.closed || typeof gmailWindow.closed === 'undefined') {
+            window.location.href = mailtoUrl;
         }
+        showToast(`✉️ Email Compose opened! (To: ${donorEmail} | CC: kalyanfoundation039@gmail.com)`);
 
         return true;
     }
