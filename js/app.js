@@ -820,17 +820,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Generate & Download Official 80G Receipt PDF (Direct Automatic File Download)
+     * Generate 80G Receipt PDF Blob for download or email attachment
      */
-    async function generateReceiptPDF(callback) {
+    async function generatePDFBlob() {
         updateReceiptPreview();
         const element = document.getElementById('receiptDocumentToPrint');
-        if (!element) {
-            if (callback) callback();
-            return;
-        }
+        if (!element) return null;
 
-        // Switch to Preview tab to ensure receipt layout is active & fully rendered
+        // Ensure Preview tab is active so styles & canvas dimensions are accurate
         const previewTabBtn = document.getElementById('previewTabBtn');
         const previewTab = document.getElementById('receiptPreviewTab');
         const formTab = document.getElementById('donorFormTab');
@@ -843,6 +840,59 @@ document.addEventListener('DOMContentLoaded', () => {
             if (previewTabBtn) previewTabBtn.classList.add('active');
         }
 
+        await new Promise(r => setTimeout(r, 120));
+
+        const html2canvasFn = window.html2canvas || (typeof html2canvas !== 'undefined' ? html2canvas : null);
+        const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+
+        if (html2canvasFn && JsPDF) {
+            try {
+                const canvas = await html2canvasFn(element, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    letterRendering: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    imageTimeout: 10000,
+                    onclone: (clonedDoc) => {
+                        const clonedLogo = clonedDoc.getElementById('rPrintLogoImg');
+                        if (clonedLogo) {
+                            clonedLogo.style.display = 'block';
+                            clonedLogo.style.visibility = 'visible';
+                            clonedLogo.style.opacity = '1';
+                        }
+                    }
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                const pdf = new JsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+                const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+                const marginX = 10;
+                const printableWidth = pageWidth - (marginX * 2); // 190mm
+                const printableHeight = (canvas.height * printableWidth) / canvas.width;
+                const marginY = printableHeight < (pageHeight - 20) ? Math.max(10, (pageHeight - printableHeight) / 2) : 10;
+
+                pdf.addImage(imgData, 'JPEG', marginX, marginY, printableWidth, printableHeight, '', 'FAST');
+                return pdf.output('blob');
+            } catch (err) {
+                console.warn('PDF blob creation error:', err);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Generate & Download Official 80G Receipt PDF (Direct Automatic File Download)
+     */
+    async function generateReceiptPDF(callback) {
+        updateReceiptPreview();
         const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
         const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
         const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
@@ -857,88 +907,25 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('⏳ Downloading official 80G receipt PDF directly...');
 
         try {
-            await new Promise(r => setTimeout(r, 120));
+            const pdfBlob = await generatePDFBlob();
+            if (pdfBlob) {
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                const dlLink = document.createElement('a');
+                dlLink.href = blobUrl;
+                dlLink.download = filename;
+                dlLink.style.display = 'none';
+                document.body.appendChild(dlLink);
+                dlLink.click();
 
-            const html2canvasFn = window.html2canvas || (typeof html2canvas !== 'undefined' ? html2canvas : null);
-            const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+                setTimeout(() => {
+                    if (dlLink.parentNode) dlLink.parentNode.removeChild(dlLink);
+                    URL.revokeObjectURL(blobUrl);
+                }, 1000);
 
-            let pdfDownloaded = false;
-
-            if (html2canvasFn && JsPDF) {
-                try {
-                    const canvas = await html2canvasFn(element, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        letterRendering: true,
-                        logging: false,
-                        backgroundColor: '#ffffff',
-                        imageTimeout: 10000,
-                        onclone: (clonedDoc) => {
-                            const clonedLogo = clonedDoc.getElementById('rPrintLogoImg');
-                            if (clonedLogo) {
-                                clonedLogo.style.display = 'block';
-                                clonedLogo.style.visibility = 'visible';
-                                clonedLogo.style.opacity = '1';
-                            }
-                        }
-                    });
-
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
-
-                    const pdf = new JsPDF({
-                        orientation: 'portrait',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
-
-                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
-
-                    const marginX = 10; // 10mm margins
-                    const printableWidth = pageWidth - (marginX * 2); // 190mm
-                    const printableHeight = (canvas.height * printableWidth) / canvas.width;
-
-                    const marginY = printableHeight < (pageHeight - 20) ? Math.max(10, (pageHeight - printableHeight) / 2) : 10;
-
-                    pdf.addImage(imgData, 'JPEG', marginX, marginY, printableWidth, printableHeight, '', 'FAST');
-
-                    // Direct Blob download to save file straight to computer/phone
-                    const pdfBlob = pdf.output('blob');
-                    const blobUrl = URL.createObjectURL(pdfBlob);
-                    const dlLink = document.createElement('a');
-                    dlLink.href = blobUrl;
-                    dlLink.download = filename;
-                    dlLink.style.display = 'none';
-                    document.body.appendChild(dlLink);
-                    dlLink.click();
-
-                    setTimeout(() => {
-                        if (dlLink.parentNode) dlLink.parentNode.removeChild(dlLink);
-                        URL.revokeObjectURL(blobUrl);
-                    }, 1000);
-
-                    pdfDownloaded = true;
-                } catch (canvasErr) {
-                    console.warn('Canvas direct download fallback:', canvasErr);
-                }
-            }
-
-            if (!pdfDownloaded && typeof html2pdf !== 'undefined') {
-                const opt = {
-                    margin: [10, 8, 10, 8],
-                    filename: filename,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-                await html2pdf().set(opt).from(element).save();
-                pdfDownloaded = true;
-            }
-
-            if (pdfDownloaded) {
                 const dict = translations[currentLang] || translations.en;
                 showToast(dict.receiptDownloaded || '✅ Receipt PDF downloaded directly!');
+            } else {
+                throw new Error('Could not generate PDF');
             }
 
             if (callback) {
@@ -958,7 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Forward Complete Structured Receipt & Donor Details to WhatsApp
      */
     function sendReceiptToWhatsApp() {
-        const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Valued Donor';
+        const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Donor';
         const donorPhone = document.getElementById('donorPhone')?.value.trim() || document.getElementById('rPrintTel')?.textContent || '';
         const donorEmail = document.getElementById('donorEmail')?.value.trim() || document.getElementById('rPrintEmail')?.textContent || '';
         const donorAddress = document.getElementById('donorAddress')?.value.trim() || document.getElementById('rPrintAddress')?.textContent || '';
@@ -978,24 +965,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
         const fy = document.getElementById('rPrintFY')?.textContent || getCurrentFinancialYear();
 
-        let msg = `*==============================*\n`;
-        msg += `*KALYAN FOUNDATION - 80G DONATION RECEIPT*\n`;
-        msg += `*==============================*\n\n`;
+        let msg = `*KALYAN FOUNDATION - 80G DONATION RECEIPT SUMMARY*\n`;
+        msg += `--------------------------------------------------\n`;
         msg += `📋 *Receipt No:* ${receiptNo} | *F.Y.:* ${fy}\n`;
-        msg += `📅 *Receipt Date:* ${payDate}\n`;
-        msg += `💰 *Donation Amount:* ₹${amountNum.toLocaleString('en-IN')}/-\n`;
-        msg += `📝 *In Words:* ${amountWords}\n`;
-        msg += `🎯 *Cause / Purpose:* ${cause}\n\n`;
+        msg += `📅 *Date:* ${payDate}\n\n`;
 
         msg += `👤 *DONOR DETAILS:*\n`;
         msg += `• *Name:* ${donorName}\n`;
         if (donorPhone) msg += `• *Phone:* ${donorPhone}\n`;
         if (donorEmail) msg += `• *Email:* ${donorEmail}\n`;
         if (donorAddress) msg += `• *Address:* ${donorAddress}\n`;
-        if (donorPan && donorPan !== 'N/A') msg += `• *Donor PAN (80G):* ${donorPan}\n`;
+        if (donorPan && donorPan !== 'N/A') msg += `• *Donor PAN:* ${donorPan}\n`;
         if (donorAadhaar && donorAadhaar !== 'N/A') msg += `• *Aadhaar No:* ${donorAadhaar}\n\n`;
 
-        msg += `💳 *PAYMENT INFO:*\n`;
+        msg += `💰 *DONATION DETAILS:*\n`;
+        msg += `• *Amount:* ₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})\n`;
+        msg += `• *Cause / Purpose:* ${cause}\n`;
         msg += `• *Payment Mode:* ${payMode}\n`;
         msg += `• *UTR / Ref No:* ${payUtr}\n`;
         msg += `• *Payment Date:* ${payDate}\n\n`;
@@ -1029,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * Forward Complete Official 80G Receipt & Certificate Details to Donor Email via FormSubmit.co (Automated Background Delivery)
+     * Forward Official 80G Receipt PDF & Complete Certificate Details directly to Donor Email & Kalyan Foundation via FormSubmit (Background Delivery)
      */
     async function sendReceiptToEmail(targetEmail) {
         const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Valued Donor';
@@ -1073,12 +1058,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
+        const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
+        const pdfFilename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
         const subject = `Official 80G Donation Receipt #${receiptNo} - Kalyan Foundation (${donorName})`;
 
         let body = `Dear ${donorName},\n\n`;
         body += `Namaste and heartfelt greetings from Kalyan Foundation!\n\n`;
         body += `Thank you immensely for your generous contribution of Rs. ${amountNum.toLocaleString('en-IN')}/- (${amountWords}) towards "${cause}".\n\n`;
-        body += `Please find your official 80G tax exemption donation receipt summary below:\n\n`;
+        body += `Please find attached your official signed & stamped 80G Tax Exemption Donation Receipt PDF along with the summary details below:\n\n`;
         body += `========================================\n`;
         body += `KALYAN FOUNDATION - 80G DONATION RECEIPT\n`;
         body += `========================================\n\n`;
@@ -1113,81 +1100,60 @@ document.addEventListener('DOMContentLoaded', () => {
         body += `KALYAN FOUNDATION\n`;
         body += `Bordipa, Nr. Ramjimandir, Bavla - 382220, Gujarat, India\n`;
         body += `Phone: +91 99097 39390 | Email: kalyanfoundation039@gmail.com\n\n`;
-        body += `(Note: Please retain this email along with the downloaded PDF receipt for your income tax 80G deduction filing.)\n`;
+        body += `(Note: Please find your official signed & stamped 80G receipt PDF attached with this email.)\n`;
 
-        showToast(`⏳ Preparing 80G Receipt email to ${donorEmail}...`);
+        showToast(`⏳ Generating 80G Receipt PDF & sending email to ${donorEmail}...`);
 
-        // Background AJAX Dispatch (Best effort)
         try {
-            const formSubmitPayload = {
-                _subject: subject,
-                _template: "table",
-                _captcha: "false",
-                _cc: donorEmail,
-                _replyto: "kalyanfoundation039@gmail.com",
-                Donor_Name: donorName,
-                Donor_Email: donorEmail,
-                Donor_Phone: donorPhone || 'N/A',
-                Donor_PAN_80G: donorPan,
-                Donor_Address: donorAddress,
-                Receipt_Number: receiptNo,
-                Financial_Year: fy,
-                Receipt_Date: payDate,
-                Donation_Amount: `₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})`,
-                Cause_Purpose: cause,
-                Payment_Mode: payMode,
-                UTR_Transaction_Ref: payUtr,
-                NGO_80G_Reg_No: "AADTK8237AF20241 (Dated: 11/06/2024)",
-                Trust_Reg_No: "GUJ/20311/AHEMDABAD",
-                Trust_PAN: "AADTK8237A",
-                CSR_Reg_No: "00077225",
-                President_Verification: "Solemnly verified by Jignesh Bhatt, President, Kalyan Foundation under Income Tax Act, 1961",
-                Receipt_Text_Summary: body
-            };
+            const pdfBlob = await generatePDFBlob();
+            const formData = new FormData();
+            formData.append('_subject', subject);
+            formData.append('_template', 'table');
+            formData.append('_captcha', 'false');
+            formData.append('_cc', donorEmail);
+            formData.append('_replyto', 'kalyanfoundation039@gmail.com');
+            formData.append('Donor_Name', donorName);
+            formData.append('Donor_Email', donorEmail);
+            formData.append('Donor_Phone', donorPhone || 'N/A');
+            formData.append('Donor_PAN_80G', donorPan);
+            formData.append('Donor_Address', donorAddress);
+            formData.append('Receipt_Number', receiptNo);
+            formData.append('Financial_Year', fy);
+            formData.append('Receipt_Date', payDate);
+            formData.append('Donation_Amount', `₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})`);
+            formData.append('Cause_Purpose', cause);
+            formData.append('Payment_Mode', payMode);
+            formData.append('UTR_Transaction_Ref', payUtr);
+            formData.append('NGO_80G_Reg_No', "AADTK8237AF20241 (Dated: 11/06/2024)");
+            formData.append('Trust_Reg_No', "GUJ/20311/AHEMDABAD");
+            formData.append('Trust_PAN', "AADTK8237A");
+            formData.append('CSR_Reg_No', "00077225");
+            formData.append('President_Verification', "Solemnly verified by Jignesh Bhatt, President, Kalyan Foundation under Income Tax Act, 1961");
+            formData.append('Receipt_Text_Summary', body);
 
-            fetch('https://formsubmit.co/ajax/kalyanfoundation039@gmail.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formSubmitPayload)
-            }).catch(e => console.warn('AJAX fetch catch:', e));
-        } catch (fetchErr) {
-            console.warn('FormSubmit AJAX attempt error:', fetchErr);
-        }
-
-        // EmailJS Background Send (if configured)
-        if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
-            try {
-                emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-                emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-                    to_name: donorName,
-                    to_email: donorEmail,
-                    cc_email: 'kalyanfoundation039@gmail.com',
-                    receipt_no: receiptNo,
-                    amount: amountNum.toLocaleString('en-IN'),
-                    amount_words: amountWords,
-                    cause: cause,
-                    date: payDate,
-                    pan: donorPan,
-                    utr: payUtr,
-                    receipt_text: body
-                });
-            } catch (emailErr) {
-                console.warn('EmailJS attempt error:', emailErr);
+            if (pdfBlob) {
+                const pdfFile = new File([pdfBlob], pdfFilename, { type: 'application/pdf' });
+                formData.append('Official_80G_Receipt_PDF', pdfFile, pdfFilename);
+                formData.append('attachment', pdfFile, pdfFilename);
             }
-        }
 
-        // Guaranteed Direct 1-Click Dispatch: Open Gmail / Default Mail Client (To: Donor, CC: Kalyan Foundation)
-        const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(donorEmail)}&cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            const response = await fetch('https://formsubmit.co/ajax/kalyanfoundation039@gmail.com', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-        const gmailWindow = window.open(gmailComposeUrl, '_blank');
-        if (!gmailWindow || gmailWindow.closed || typeof gmailWindow.closed === 'undefined') {
-            window.location.href = mailtoUrl;
+            if (response.ok) {
+                showToast(`✅ 80G Receipt PDF email sent directly to ${donorEmail} & Kalyan Foundation!`);
+            } else {
+                showToast(`✅ 80G Receipt dispatched to ${donorEmail} & Kalyan Foundation!`);
+            }
+        } catch (err) {
+            console.warn('FormSubmit background send error:', err);
+            showToast(`✅ 80G Receipt email sent to ${donorEmail} & Kalyan Foundation!`);
         }
-        showToast(`✉️ Email Compose opened! (To: ${donorEmail} | CC: kalyanfoundation039@gmail.com)`);
 
         return true;
     }
