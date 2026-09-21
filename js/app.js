@@ -804,9 +804,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Generate & Download Official 80G Receipt PDF (Direct 1-Page Print / Save to PDF with Logo)
+     * Generate & Download Official 80G Receipt PDF (Direct Automatic File Download)
      */
-    function generateReceiptPDF(callback) {
+    async function generateReceiptPDF(callback) {
         updateReceiptPreview();
         const element = document.getElementById('receiptDocumentToPrint');
         if (!element) {
@@ -827,16 +827,115 @@ document.addEventListener('DOMContentLoaded', () => {
             if (previewTabBtn) previewTabBtn.classList.add('active');
         }
 
-        const dict = translations[currentLang] || translations.en;
-        showToast('📄 Opening official 80G PDF receipt...');
+        const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
+        const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
+        const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
+        const filename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
 
-        setTimeout(() => {
-            window.print();
-            showToast(dict.receiptDownloaded || 'Receipt PDF generated! Click Save to download.');
-            if (callback) {
-                setTimeout(callback, 800);
+        const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
+        const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
+
+        if (downloadPdfBtn) downloadPdfBtn.disabled = true;
+        if (comboBtn) comboBtn.disabled = true;
+
+        showToast('⏳ Downloading official 80G receipt PDF directly...');
+
+        try {
+            await new Promise(r => setTimeout(r, 120));
+
+            const html2canvasFn = window.html2canvas || (typeof html2canvas !== 'undefined' ? html2canvas : null);
+            const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+
+            let pdfDownloaded = false;
+
+            if (html2canvasFn && JsPDF) {
+                try {
+                    const canvas = await html2canvasFn(element, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        letterRendering: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        imageTimeout: 10000,
+                        onclone: (clonedDoc) => {
+                            const clonedLogo = clonedDoc.getElementById('rPrintLogoImg');
+                            if (clonedLogo) {
+                                clonedLogo.style.display = 'block';
+                                clonedLogo.style.visibility = 'visible';
+                                clonedLogo.style.opacity = '1';
+                            }
+                        }
+                    });
+
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+
+                    const pdf = new JsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+
+                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+
+                    const marginX = 10; // 10mm margins
+                    const printableWidth = pageWidth - (marginX * 2); // 190mm
+                    const printableHeight = (canvas.height * printableWidth) / canvas.width;
+
+                    const marginY = printableHeight < (pageHeight - 20) ? Math.max(10, (pageHeight - printableHeight) / 2) : 10;
+
+                    pdf.addImage(imgData, 'JPEG', marginX, marginY, printableWidth, printableHeight, '', 'FAST');
+
+                    // Direct Blob download to save file straight to computer/phone
+                    const pdfBlob = pdf.output('blob');
+                    const blobUrl = URL.createObjectURL(pdfBlob);
+                    const dlLink = document.createElement('a');
+                    dlLink.href = blobUrl;
+                    dlLink.download = filename;
+                    dlLink.style.display = 'none';
+                    document.body.appendChild(dlLink);
+                    dlLink.click();
+
+                    setTimeout(() => {
+                        if (dlLink.parentNode) dlLink.parentNode.removeChild(dlLink);
+                        URL.revokeObjectURL(blobUrl);
+                    }, 1000);
+
+                    pdfDownloaded = true;
+                } catch (canvasErr) {
+                    console.warn('Canvas direct download fallback:', canvasErr);
+                }
             }
-        }, 300);
+
+            if (!pdfDownloaded && typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: [10, 8, 10, 8],
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                await html2pdf().set(opt).from(element).save();
+                pdfDownloaded = true;
+            }
+
+            if (pdfDownloaded) {
+                const dict = translations[currentLang] || translations.en;
+                showToast(dict.receiptDownloaded || '✅ Receipt PDF downloaded directly!');
+            }
+
+            if (callback) {
+                setTimeout(callback, 600);
+            }
+        } catch (err) {
+            console.error('PDF Generation Error:', err);
+            showToast('❌ Direct download error: ' + (err.message || 'Please check details and try again.'));
+            if (callback) callback();
+        } finally {
+            if (downloadPdfBtn) downloadPdfBtn.disabled = false;
+            if (comboBtn) comboBtn.disabled = false;
+        }
     }
 
     /**
