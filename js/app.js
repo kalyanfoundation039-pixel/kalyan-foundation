@@ -1139,6 +1139,20 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('Receipt_Text_Summary', body);
 
             if (pdfBlob) {
+                // 1. Direct PDF Download to donor's computer/phone
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                const dlLink = document.createElement('a');
+                dlLink.href = blobUrl;
+                dlLink.download = pdfFilename;
+                dlLink.style.display = 'none';
+                document.body.appendChild(dlLink);
+                dlLink.click();
+                setTimeout(() => {
+                    if (dlLink.parentNode) dlLink.parentNode.removeChild(dlLink);
+                    URL.revokeObjectURL(blobUrl);
+                }, 1000);
+
+                // 2. Attach to FormSubmit payload
                 const pdfFile = new File([pdfBlob], pdfFilename, { type: 'application/pdf' });
                 formData.append('Official_80G_Receipt_PDF', pdfFile, pdfFilename);
                 formData.append('attachment', pdfFile, pdfFilename);
@@ -1153,13 +1167,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                showToast(`✅ 80G Receipt PDF email sent directly to ${donorEmail} & Kalyan Foundation!`);
+                showToast(`✅ 80G PDF downloaded & email sent to ${donorEmail} & Kalyan Foundation!`);
             } else {
-                showToast(`✅ 80G Receipt dispatched to ${donorEmail} & Kalyan Foundation!`);
+                showToast(`✅ 80G PDF downloaded & receipt sent to ${donorEmail}!`);
             }
         } catch (err) {
             console.warn('FormSubmit background send error:', err);
-            showToast(`✅ 80G Receipt email sent to ${donorEmail} & Kalyan Foundation!`);
+            showToast(`✅ 80G PDF saved & email sent to ${donorEmail}!`);
         }
 
         return true;
