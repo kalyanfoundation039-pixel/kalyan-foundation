@@ -144,7 +144,7 @@
                     <div class="stat-label" data-i18n="statVolunteers">Volunteers</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" data-target="25" data-suffix="+">25+</div>
+                    <div class="stat-number" data-target="10" data-suffix="+">10+</div>
                     <div class="stat-label" data-i18n="statYears">Years Service</div>
                 </div>
             </div>
@@ -685,7 +685,7 @@
                             <!-- TOP HEADER SECTION -->
                             <div class="r-top-header">
                                 <div class="r-logo-cell">
-                                    <img src="assets/logo.jpg" alt="Kalyan Foundation Logo" class="r-logo-img">
+                                    <img id="rPrintLogoImg" src="assets/logo.jpg" alt="Kalyan Foundation Logo" class="r-logo-img" loading="eager">
                                 </div>
                                 <div class="r-header-center">
                                     <h1 class="r-trust-name">KALYAN FOUNDATION</h1>
@@ -775,25 +775,7 @@
                                     </div>
                                     <div class="r-verif-sign-col">
                                         <span class="r-lbl-sign">Signature:</span>
-                                        <div class="r-stamp-signature-box">
-                                            <!-- Oval Trust Stamp SVG -->
-                                            <svg viewBox="0 0 170 120" width="145" height="100" class="r-stamp-svg">
-                                                <ellipse cx="85" cy="60" rx="80" ry="54" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6,2"/>
-                                                <ellipse cx="85" cy="60" rx="72" ry="46" fill="none" stroke="#1d4ed8" stroke-width="1.8"/>
-                                                <path id="ovalTopCurve" d="M 18 60 A 67 40 0 0 1 152 60" fill="transparent"/>
-                                                <path id="ovalBottomCurve" d="M 18 60 A 67 40 0 0 0 152 60" fill="transparent"/>
-                                                <text fill="#1d4ed8" font-size="10.5" font-weight="900" letter-spacing="1">
-                                                    <textPath href="#ovalTopCurve" startOffset="50%" text-anchor="middle">KALYAN FOUNDATION</textPath>
-                                                </text>
-                                                <text fill="#1d4ed8" font-size="9" font-weight="900" letter-spacing="0.5">
-                                                    <textPath href="#ovalBottomCurve" startOffset="50%" text-anchor="middle">AHMEDABAD</textPath>
-                                                </text>
-                                                <text x="85" y="54" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="800">Reg.No</text>
-                                                <text x="85" y="66" text-anchor="middle" fill="#1d4ed8" font-size="9.5" font-weight="900">20311</text>
-                                                <text x="85" y="78" text-anchor="middle" fill="#1d4ed8" font-size="8.5" font-weight="700">AHMEDABAD</text>
-                                            </svg>
-                                            <div class="r-handwritten-signature">Jignesh Bhatt</div>
-                                        </div>
+                                        <span class="u-val-sign-space"></span>
                                     </div>
                                 </div>
                             </div>
@@ -848,6 +830,8 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/qrcode.min.js"></script>

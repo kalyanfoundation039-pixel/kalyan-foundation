@@ -1254,12 +1254,14 @@ body {
   padding: 20px;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: all var(--transition-fast);
 }
 
 .modal-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .modal-content {
@@ -1357,12 +1359,14 @@ body {
   padding: 16px;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: all var(--transition-fast);
 }
 
 .lightbox-modal.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .lightbox-img-wrap {
@@ -1477,12 +1481,14 @@ body {
   padding: 12px;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: all var(--transition-fast);
 }
 
 .receipt-modal-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .receipt-modal-content {
@@ -1742,9 +1748,9 @@ body {
 }
 
 .kalyan-official-receipt-sheet {
-  width: 100% !important;
-  max-width: 760px !important;
-  min-width: 0 !important;
+  width: 680px !important;
+  max-width: 680px !important;
+  min-width: 680px !important;
   background: #ffffff !important;
   color: #000000 !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
@@ -1757,7 +1763,7 @@ body {
 
 .receipt-inner-frame {
   border: 1.2px solid #000000;
-  padding: 12px 14px;
+  padding: 10px 12px;
   background: #ffffff;
   box-sizing: border-box;
   width: 100%;
@@ -2027,32 +2033,12 @@ body {
   color: #000000;
 }
 
-.r-stamp-signature-box {
-  position: relative;
+.u-val-sign-space {
   display: inline-block;
-  width: 130px;
-  height: 85px;
-}
-
-.r-stamp-svg {
-  display: block;
-  width: 130px;
-  height: 85px;
-  transform: rotate(-3deg);
-  opacity: 0.95;
-}
-
-.r-handwritten-signature {
-  position: absolute;
-  top: 26px;
-  left: 14px;
-  font-family: 'Brush Script MT', 'Segoe Script', 'Great Vibes', cursive;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1e3a8a;
-  transform: rotate(-8deg);
-  pointer-events: none;
-  user-select: none;
+  width: 140px;
+  border-bottom: 1.5px solid #000000;
+  min-height: 24px;
+  margin-left: 6px;
 }
 
 /* Statutory Exemption Footer */
@@ -2196,51 +2182,106 @@ body {
   box-shadow: none !important;
 }
 
-/* Print Media Query */
+/* Print Media Query - Guarantees pristine 1-page official receipt */
 @media print {
-  body * {
-    visibility: hidden;
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  #receiptDocumentToPrint, #receiptDocumentToPrint * {
-    visibility: visible;
+  body > * {
+    display: none !important;
+  }
+  #donationReceiptModal {
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+  .receipt-modal-content {
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .receipt-modal-header,
+  .receipt-tabs-nav,
+  .receipt-modal-actions,
+  #donorFormTab,
+  .modal-close-btn,
+  .btn-close-modal,
+  .form-proceed-wrap {
+    display: none !important;
+  }
+  #receiptPreviewTab {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+  .receipt-preview-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
   }
   #receiptDocumentToPrint {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100% !important;
-    max-width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 680px !important;
+    max-width: 680px !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
     box-shadow: none !important;
-    border: none !important;
+    border: 2px solid #000000 !important;
+    padding: 6px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .receipt-page {
-    page-break-after: always;
+  #receiptDocumentToPrint * {
+    visibility: visible !important;
+  }
+  .r-logo-img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 }
 
-/* Responsive tweaks */
+/* Responsive tweaks for modal form & actions */
 @media (max-width: 540px) {
   .form-row-2, .form-row-3 {
     grid-template-columns: 1fr;
   }
   .actions-split-grid {
     grid-template-columns: 1fr;
-  }
-  .r-line-grid-3 {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-  .r-line-grid-2 {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-  .r-line-meta {
-    flex-direction: column;
-    gap: 4px;
-  }
-  .r-legal-line-1 {
-    flex-direction: column;
-    gap: 2px;
   }
 }
 

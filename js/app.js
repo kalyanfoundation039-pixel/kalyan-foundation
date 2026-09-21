@@ -804,65 +804,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Generate & Download Official 80G Receipt PDF via html2pdf
+     * Generate & Download Official 80G Receipt PDF (Direct 1-Page Print / Save to PDF with Logo)
      */
     function generateReceiptPDF(callback) {
+        updateReceiptPreview();
         const element = document.getElementById('receiptDocumentToPrint');
         if (!element) {
             if (callback) callback();
             return;
         }
 
-        const donorName = document.getElementById('donorName')?.value.trim() || 'Donor';
-        const cleanName = donorName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20);
-        const receiptNo = document.getElementById('rPrintNo')?.textContent || '5';
-        const filename = `Kalyan_Foundation_80G_Receipt_${receiptNo}_${cleanName}.pdf`;
-        const opt = {
-            margin: [5, 5, 5, 5],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.99 },
-            html2canvas: {
-                scale: 2.2,
-                useCORS: true,
-                letterRendering: true,
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: 800,
-                backgroundColor: '#ffffff'
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all'] }
-        };
+        // Switch to Preview tab to ensure receipt layout is active & fully rendered
+        const previewTabBtn = document.getElementById('previewTabBtn');
+        const previewTab = document.getElementById('receiptPreviewTab');
+        const formTab = document.getElementById('donorFormTab');
+        const formTabBtn = document.querySelector('.receipt-tab-btn[data-tab="donorFormTab"]');
 
-        const downloadPdfBtn = document.getElementById('downloadPdfReceiptBtn');
-        const comboBtn = document.getElementById('comboDownloadAndWhatsAppBtn');
-
-        if (downloadPdfBtn) downloadPdfBtn.disabled = true;
-        if (comboBtn) comboBtn.disabled = true;
-
-        showToast('Generating official 80G PDF receipt...');
-
-        if (typeof html2pdf !== 'undefined') {
-            html2pdf().set(opt).from(element).save().then(() => {
-                if (downloadPdfBtn) downloadPdfBtn.disabled = false;
-                if (comboBtn) comboBtn.disabled = false;
-                const dict = translations[currentLang] || translations.en;
-                showToast(dict.receiptDownloaded || 'Receipt PDF downloaded successfully!');
-                if (callback) callback();
-            }).catch(err => {
-                console.error('PDF error:', err);
-                if (downloadPdfBtn) downloadPdfBtn.disabled = false;
-                if (comboBtn) comboBtn.disabled = false;
-                window.print();
-                if (callback) callback();
-            });
-        } else {
-            // Fallback to print
-            if (downloadPdfBtn) downloadPdfBtn.disabled = false;
-            if (comboBtn) comboBtn.disabled = false;
-            window.print();
-            if (callback) callback();
+        if (formTab && formTab.classList.contains('active')) {
+            formTab.classList.remove('active');
+            if (formTabBtn) formTabBtn.classList.remove('active');
+            if (previewTab) previewTab.classList.add('active');
+            if (previewTabBtn) previewTabBtn.classList.add('active');
         }
+
+        const dict = translations[currentLang] || translations.en;
+        showToast('📄 Opening official 80G PDF receipt...');
+
+        setTimeout(() => {
+            window.print();
+            showToast(dict.receiptDownloaded || 'Receipt PDF generated! Click Save to download.');
+            if (callback) {
+                setTimeout(callback, 800);
+            }
+        }, 300);
     }
 
     /**
