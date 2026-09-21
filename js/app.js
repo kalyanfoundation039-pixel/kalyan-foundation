@@ -1110,8 +1110,15 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('_subject', subject);
             formData.append('_template', 'table');
             formData.append('_captcha', 'false');
+            
+            // Standard FormSubmit fields to trigger automatic donor confirmation/autoresponse
+            formData.append('email', donorEmail); // Critical for FormSubmit to send to donor
+            formData.append('name', donorName);
+            formData.append('_autoresponse', body); // Sends complete official 80G receipt to Donor's Inbox
             formData.append('_cc', donorEmail);
             formData.append('_replyto', 'kalyanfoundation039@gmail.com');
+
+            // Structured Table details
             formData.append('Donor_Name', donorName);
             formData.append('Donor_Email', donorEmail);
             formData.append('Donor_Phone', donorPhone || 'N/A');
