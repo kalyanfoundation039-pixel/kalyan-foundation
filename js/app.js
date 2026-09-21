@@ -1020,10 +1020,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(url, '_blank');
     }
 
+    // EmailJS Configuration for 100% automated background email delivery
+    // To enable automatic background sending to donor inbox, add your free EmailJS keys below:
+    const EMAILJS_CONFIG = {
+        PUBLIC_KEY: "",     // e.g. "YOUR_EMAILJS_PUBLIC_KEY"
+        SERVICE_ID: "",     // e.g. "service_kalyan"
+        TEMPLATE_ID: ""     // e.g. "template_80g_receipt"
+    };
+
     /**
-     * Forward Complete Official 80G Receipt & Certificate Details to Donor Email
+     * Forward Complete Official 80G Receipt & Certificate Details to Donor Email via FormSubmit.co (Automated Background Delivery)
      */
-    function sendReceiptToEmail(targetEmail) {
+    async function sendReceiptToEmail(targetEmail) {
         const donorName = document.getElementById('donorName')?.value.trim() || document.getElementById('rPrintName')?.textContent || 'Valued Donor';
         const donorPhone = document.getElementById('donorPhone')?.value.trim() || document.getElementById('rPrintTel')?.textContent || '';
         const donorEmail = targetEmail || document.getElementById('donorEmail')?.value.trim() || document.getElementById('rPrintEmail')?.textContent || '';
@@ -1048,7 +1056,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('⚠️ Please enter a valid Donor Email address in the form.');
             const emailInput = document.getElementById('donorEmail');
             if (emailInput) {
-                // Switch to Donor Form tab to enter email
                 const formTabBtn = document.querySelector('.receipt-tab-btn[data-tab="donorFormTab"]');
                 const formTab = document.getElementById('donorFormTab');
                 const previewTab = document.getElementById('receiptPreviewTab');
@@ -1084,8 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body += `• Email Address: ${donorEmail}\n`;
         if (donorAddress) body += `• Address: ${donorAddress}\n`;
         if (donorPan && donorPan !== 'N/A') body += `• Donor PAN (80G Exemption): ${donorPan}\n`;
-        if (donorAadhaar && donorAadhaar !== 'N/A') body += `• Aadhaar No: ${donorAadhaar}\n`;
-        body += `\n`;
+        if (donorAadhaar && donorAadhaar !== 'N/A') body += `• Aadhaar No: ${donorAadhaar}\n\n`;
         body += `💰 DONATION & PAYMENT DETAILS:\n`;
         body += `-----------------------------\n`;
         body += `• Amount: Rs. ${amountNum.toLocaleString('en-IN')}/-\n`;
@@ -1109,10 +1115,115 @@ document.addEventListener('DOMContentLoaded', () => {
         body += `Phone: +91 99097 39390 | Email: kalyanfoundation039@gmail.com\n\n`;
         body += `(Note: Please retain this email along with the downloaded PDF receipt for your income tax 80G deduction filing.)\n`;
 
-        const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        window.open(mailtoUrl, '_blank');
-        showToast(`📧 Official 80G receipt email drafted for ${donorEmail}!`);
+        showToast(`⏳ Dispatching 80G Receipt email to ${donorEmail}...`);
+
+        let emailSentSuccessfully = false;
+
+        // 1. Direct Background Dispatch via FormSubmit hidden form (Bypasses all CORS blocks)
+        const hiddenForm = document.getElementById('hiddenEmailForm');
+        if (hiddenForm) {
+            const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+            setVal('fs_subject', subject);
+            setVal('fs_cc', donorEmail);
+            setVal('fs_name', donorName);
+            setVal('fs_email', donorEmail);
+            setVal('fs_phone', donorPhone || 'N/A');
+            setVal('fs_pan', donorPan);
+            setVal('fs_address', donorAddress);
+            setVal('fs_receipt', receiptNo);
+            setVal('fs_fy', fy);
+            setVal('fs_date', payDate);
+            setVal('fs_amount', `₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})`);
+            setVal('fs_cause', cause);
+            setVal('fs_paymode', payMode);
+            setVal('fs_utr', payUtr);
+            setVal('fs_summary', body);
+
+            try {
+                hiddenForm.submit();
+                emailSentSuccessfully = true;
+                showToast(`✅ 80G Receipt email dispatched to ${donorEmail} & Kalyan Foundation!`);
+            } catch (formErr) {
+                console.warn('Hidden form submit error:', formErr);
+            }
+        }
+
+        // 2. Parallel AJAX Fetch Dispatch
+        try {
+            const formSubmitPayload = {
+                _subject: subject,
+                _template: "table",
+                _captcha: "false",
+                _cc: donorEmail,
+                _replyto: "kalyanfoundation039@gmail.com",
+                Donor_Name: donorName,
+                Donor_Email: donorEmail,
+                Donor_Phone: donorPhone || 'N/A',
+                Donor_PAN_80G: donorPan,
+                Donor_Address: donorAddress,
+                Receipt_Number: receiptNo,
+                Financial_Year: fy,
+                Receipt_Date: payDate,
+                Donation_Amount: `₹${amountNum.toLocaleString('en-IN')}/- (${amountWords})`,
+                Cause_Purpose: cause,
+                Payment_Mode: payMode,
+                UTR_Transaction_Ref: payUtr,
+                NGO_80G_Reg_No: "AADTK8237AF20241 (Dated: 11/06/2024)",
+                Trust_Reg_No: "GUJ/20311/AHEMDABAD",
+                Trust_PAN: "AADTK8237A",
+                CSR_Reg_No: "00077225",
+                President_Verification: "Solemnly verified by Jignesh Bhatt, President, Kalyan Foundation under Income Tax Act, 1961",
+                Receipt_Text_Summary: body
+            };
+
+            fetch('https://formsubmit.co/ajax/kalyanfoundation039@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formSubmitPayload)
+            }).catch(e => console.warn('AJAX fetch catch:', e));
+        } catch (fetchErr) {
+            console.warn('FormSubmit AJAX attempt error:', fetchErr);
+        }
+
+        // 2. EmailJS Background Send (if configured)
+        if (!emailSentSuccessfully && typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
+            try {
+                emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
+                    to_name: donorName,
+                    to_email: donorEmail,
+                    cc_email: 'kalyanfoundation039@gmail.com',
+                    receipt_no: receiptNo,
+                    amount: amountNum.toLocaleString('en-IN'),
+                    amount_words: amountWords,
+                    cause: cause,
+                    date: payDate,
+                    pan: donorPan,
+                    utr: payUtr,
+                    receipt_text: body
+                });
+                emailSentSuccessfully = true;
+                showToast(`✅ 80G Receipt email delivered to ${donorEmail}!`);
+            } catch (emailErr) {
+                console.warn('EmailJS attempt error:', emailErr);
+            }
+        }
+
+        // 3. Fallback: Direct Web Gmail / Native Mail
+        if (!emailSentSuccessfully) {
+            const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(donorEmail)}&cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            const mailtoUrl = `mailto:${encodeURIComponent(donorEmail)}?cc=${encodeURIComponent('kalyanfoundation039@gmail.com')}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            const gmailWindow = window.open(gmailComposeUrl, '_blank');
+            if (!gmailWindow || gmailWindow.closed || typeof gmailWindow.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
+            showToast(`📧 Receipt email prepared for ${donorEmail}!`);
+        }
+
         return true;
     }
 

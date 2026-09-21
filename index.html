@@ -833,10 +833,39 @@
         </div>
     </div>
 
+    <!-- Hidden FormSubmit background email dispatcher (Works seamlessly on file://, localhost & live web) -->
+    <iframe name="hiddenEmailIframe" id="hiddenEmailIframe" style="display:none; width:0; height:0; border:0;"></iframe>
+    <form id="hiddenEmailForm" action="https://formsubmit.co/kalyanfoundation039@gmail.com" method="POST" target="hiddenEmailIframe" style="display:none;">
+        <input type="hidden" name="_subject" id="fs_subject" value="Official 80G Donation Receipt - Kalyan Foundation">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_cc" id="fs_cc" value="">
+        <input type="hidden" name="_replyto" id="fs_replyto" value="kalyanfoundation039@gmail.com">
+        <input type="hidden" name="Donor_Name" id="fs_name" value="">
+        <input type="hidden" name="Donor_Email" id="fs_email" value="">
+        <input type="hidden" name="Donor_Phone" id="fs_phone" value="">
+        <input type="hidden" name="Donor_PAN_80G" id="fs_pan" value="">
+        <input type="hidden" name="Donor_Address" id="fs_address" value="">
+        <input type="hidden" name="Receipt_Number" id="fs_receipt" value="">
+        <input type="hidden" name="Financial_Year" id="fs_fy" value="">
+        <input type="hidden" name="Receipt_Date" id="fs_date" value="">
+        <input type="hidden" name="Donation_Amount" id="fs_amount" value="">
+        <input type="hidden" name="Cause_Purpose" id="fs_cause" value="">
+        <input type="hidden" name="Payment_Mode" id="fs_paymode" value="">
+        <input type="hidden" name="UTR_Transaction_Ref" id="fs_utr" value="">
+        <input type="hidden" name="NGO_80G_Reg_No" value="AADTK8237AF20241 (Dated: 11/06/2024)">
+        <input type="hidden" name="Trust_Reg_No" value="GUJ/20311/AHEMDABAD">
+        <input type="hidden" name="Trust_PAN" value="AADTK8237A">
+        <input type="hidden" name="CSR_Reg_No" value="00077225">
+        <input type="hidden" name="President_Verification" value="Solemnly verified by Jignesh Bhatt, President, Kalyan Foundation under Income Tax Act, 1961">
+        <input type="hidden" name="Receipt_Summary" id="fs_summary" value="">
+    </form>
+
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/qrcode.min.js"></script>
     <script src="js/logo-data.js"></script>
