@@ -1065,7 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let body = `Dear ${donorName},\n\n`;
         body += `Namaste and heartfelt greetings from Kalyan Foundation!\n\n`;
         body += `Thank you immensely for your generous contribution of Rs. ${amountNum.toLocaleString('en-IN')}/- (${amountWords}) towards "${cause}".\n\n`;
-        body += `Please find attached your official signed & stamped 80G Tax Exemption Donation Receipt PDF along with the summary details below:\n\n`;
+        body += `Please find your official 80G Tax Exemption Donation Receipt summary below:\n\n`;
         body += `========================================\n`;
         body += `KALYAN FOUNDATION - 80G DONATION RECEIPT\n`;
         body += `========================================\n\n`;
@@ -1094,13 +1094,15 @@ document.addEventListener('DOMContentLoaded', () => {
         body += `• Trust Regd. No: GUJ/20311/AHEMDABAD\n`;
         body += `• Trust PAN: AADTK8237A\n`;
         body += `• CSR Reg Number: 00077225\n\n`;
-        body += `VERIFICATION:\n`;
+        body += `VERIFICATION & DECLARATION:\n`;
         body += `I, Jignesh Bhatt, President of Kalyan Foundation, solemnly declare that the certificate issued is correct, complete, and in accordance with the provisions of the Income Tax Act, 1961.\n\n`;
-        body += `With Gratitude,\n`;
-        body += `KALYAN FOUNDATION\n`;
-        body += `Bordipa, Nr. Ramjimandir, Bavla - 382220, Gujarat, India\n`;
-        body += `Phone: +91 99097 39390 | Email: kalyanfoundation039@gmail.com\n\n`;
-        body += `(Note: Please find your official signed & stamped 80G receipt PDF attached with this email.)\n`;
+        body += `📞 CONTACT & OFFICIAL SUPPORT:\n`;
+        body += `-----------------------------\n`;
+        body += `• Office: Bordipa, Nr. Ramjimandir, Bavla - 382220, Gujarat, India\n`;
+        body += `• Helpline / WhatsApp: +91 99097 39390 (https://wa.me/919909739390)\n`;
+        body += `• Official Email: kalyanfoundation039@gmail.com\n\n`;
+        body += `With Sincere Gratitude,\n`;
+        body += `KALYAN FOUNDATION (End Is Beginning)\n`;
 
         showToast(`⏳ Generating 80G Receipt PDF & sending email to ${donorEmail}...`);
 
