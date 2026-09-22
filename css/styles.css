@@ -1919,45 +1919,45 @@ body {
 .r-line-grid-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px 10px;
+  gap: 6px 12px;
   align-items: baseline;
 }
 
-/* Tel (120px) | Email (remaining dynamic width ~340px) | Donor's PAN (185px) */
+/* Tel (160px) | Email (remaining dynamic width ~305px) | Donor's PAN (175px) */
 .r-line-donor-contact {
-  grid-template-columns: 120px 1fr 185px !important;
+  grid-template-columns: 160px 1fr 175px !important;
   gap: 6px 10px;
 }
 
-/* Aadhaar (210px) | Rupees in Words (remaining ~435px) */
+/* Aadhaar (205px) | Rupees in Words (remaining ~430px) */
 .r-line-aadhaar-rupees {
-  grid-template-columns: 210px 1fr !important;
-  gap: 6px 10px;
+  grid-template-columns: 205px 1fr !important;
+  gap: 6px 12px;
 }
 
-/* on a/c of (180px) | for (remaining ~300px) | by (160px) */
+/* on a/c of (175px) | for (remaining ~295px) | by (165px) */
 .r-line-fund-details {
-  grid-template-columns: 180px 1fr 160px !important;
+  grid-template-columns: 175px 1fr 165px !important;
   gap: 6px 10px;
 }
 
-/* Date (145px) | Payment Details (remaining ~500px) */
+/* Date (135px) | Payment Details (remaining ~500px) */
 .r-line-payment-meta {
-  grid-template-columns: 145px 1fr !important;
-  gap: 6px 10px;
+  grid-template-columns: 135px 1fr !important;
+  gap: 6px 12px;
 }
 
 .r-line-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px 10px;
+  gap: 6px 12px;
   align-items: baseline;
 }
 
 .col-tel, .col-email, .col-pan, .col-aadhaar, .col-words, .col-account, .col-for, .col-by, .col-paydate, .col-paydetails {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 5px;
   min-width: 0;
   flex-wrap: nowrap;
   white-space: nowrap;
@@ -1965,20 +1965,22 @@ body {
 
 .u-val-flex {
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: 40px;
   border-bottom: 1.5px solid #000000;
   font-weight: 700;
   padding: 0 4px;
   color: #000000;
   white-space: nowrap;
-  font-size: clamp(0.70rem, 1.4vw, 0.78rem);
+  font-size: clamp(0.70rem, 1.4vw, 0.77rem);
   text-align: center;
   box-sizing: border-box;
 }
 
-.col-pan .u-val-flex {
+.col-tel .u-val-flex,
+.col-pan .u-val-flex,
+.col-aadhaar .u-val-flex,
+.col-paydate .u-val-flex {
   text-align: center;
-  letter-spacing: 0.5px;
 }
 
 .col-email .u-val-flex,
@@ -1990,7 +1992,7 @@ body {
   white-space: nowrap !important;
   text-overflow: ellipsis;
   overflow: hidden;
-  font-size: 0.73rem;
+  font-size: 0.72rem;
   letter-spacing: -0.15px;
   text-align: center;
 }
