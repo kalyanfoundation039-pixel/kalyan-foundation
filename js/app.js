@@ -683,8 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const stampImg = document.getElementById('rPrintStampImg');
-        if (stampImg && !stampImg.src) {
-            stampImg.src = window.KALYAN_STAMP_ORIGINAL_SRC || "../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790054531226.png";
+        if (stampImg && window.KALYAN_STAMP_BASE64) {
+            stampImg.src = window.KALYAN_STAMP_BASE64;
+        } else if (stampImg && !stampImg.src) {
+            stampImg.src = "assets/stamp.svg";
         }
 
         updateReceiptPreview();
@@ -752,8 +754,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('rPrintVerifDate', formattedDate);
 
         const stampImg = document.getElementById('rPrintStampImg');
-        if (stampImg && !stampImg.src) {
-            stampImg.src = window.KALYAN_STAMP_ORIGINAL_SRC || "../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790054531226.png";
+        if (stampImg && window.KALYAN_STAMP_BASE64) {
+            stampImg.src = window.KALYAN_STAMP_BASE64;
+        } else if (stampImg && !stampImg.src) {
+            stampImg.src = "assets/stamp.svg";
         }
     }
 
