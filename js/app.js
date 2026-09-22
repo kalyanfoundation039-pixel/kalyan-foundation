@@ -866,7 +866,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (previewTabBtn) previewTabBtn.classList.add('active');
         }
 
-        await new Promise(r => setTimeout(r, 120));
+        // Ensure logo and stamp images are loaded before generating PDF
+        const currentLogo = document.getElementById('rPrintLogoImg');
+        if (currentLogo && window.KALYAN_LOGO_BASE64 && !currentLogo.src.startsWith('data:')) {
+            currentLogo.src = window.KALYAN_LOGO_BASE64;
+        }
+        const currentStamp = document.getElementById('rPrintStampImg');
+        if (currentStamp && window.KALYAN_STAMP_BASE64 && !currentStamp.src.startsWith('data:')) {
+            currentStamp.src = window.KALYAN_STAMP_BASE64;
+        }
+
+        await new Promise(r => setTimeout(r, 150));
 
         const html2canvasFn = window.html2canvas || (typeof html2canvas !== 'undefined' ? html2canvas : null);
         const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
@@ -877,14 +887,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
-                    letterRendering: true,
                     logging: false,
                     backgroundColor: '#ffffff',
-                    imageTimeout: 10000,
+                    imageTimeout: 15000,
                     onclone: (clonedDoc) => {
                         const clonedLogo = clonedDoc.getElementById('rPrintLogoImg');
                         if (clonedLogo) {
-                            if (window.KALYAN_LOGO_BASE64) {
+                            if (window.KALYAN_LOGO_BASE64 && window.KALYAN_LOGO_BASE64.length > 500) {
                                 clonedLogo.src = window.KALYAN_LOGO_BASE64;
                             }
                             clonedLogo.style.display = 'block';
@@ -893,7 +902,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         const clonedStamp = clonedDoc.getElementById('rPrintStampImg');
                         if (clonedStamp) {
-                            if (window.KALYAN_STAMP_BASE64) {
+                            if (window.KALYAN_STAMP_BASE64 && window.KALYAN_STAMP_BASE64.length > 500) {
                                 clonedStamp.src = window.KALYAN_STAMP_BASE64;
                             }
                             clonedStamp.style.display = 'block';
