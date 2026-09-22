@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const DISPLAY_PHONE = '+91 99097 39390';
     const EMAIL = 'kalyanfoundation039@gmail.com';
     const INSTAGRAM_URL = 'https://www.instagram.com/kalyanfoundation_039?utm_source=qr&stkn=cTVzcWhldm9jYzMz';
-    const FACEBOOK_URL = 'https://www.facebook.com/share/1EbpBBfqA7/';
+    const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61594829303499';
     const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Bordipa+Nr+Ramjimandir+Bavla+382220';
 
     // Initialize UI
@@ -1273,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'URL;TYPE=WORK:https://www.instagram.com/kalyanfoundation_039',
             'NOTE:KALYAN FOUNDATION - End Is Beginning. Social Service Activity in Bavla. Contact: +91 99097 39390, Email: kalyanfoundation039@gmail.com',
             'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/kalyanfoundation_039',
-            'X-SOCIALPROFILE;TYPE=facebook:https://www.facebook.com/share/1EbpBBfqA7/',
+            'X-SOCIALPROFILE;TYPE=facebook:https://www.facebook.com/profile.php?id=61594829303499',
             'CATEGORIES:Social Service,NGO,Charity,Non-Profit',
             'END:VCARD'
         ].join('\r\n');
