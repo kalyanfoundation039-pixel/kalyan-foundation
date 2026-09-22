@@ -500,10 +500,10 @@
             <div class="footer-name" data-i18n="orgName">KALYAN FOUNDATION</div>
             <div class="footer-tagline" data-i18n="tagline">End Is Beginning</div>
             <div class="footer-copy" data-i18n="rightsReserved">© 2024 Kalyan Foundation. All Rights Reserved.</div>
-            <div class="dev-credit">
+            <a href="https://khushicreativetech.in" target="_blank" rel="noopener noreferrer" class="dev-credit" title="Khushi Creative Tech">
                 <span>Powered by</span>
                 <span class="dev-name">Khushi Creative Tech</span>
-            </div>
+            </a>
         </footer>
 
         <!-- Sticky Bottom Mobile Navigation Dock -->
@@ -729,9 +729,9 @@
                                     <span class="u-val-full" id="rPrintAddress">64,SUMIN PARK, G.D. HIGHSCHOOL,SAIJPUR, AHEMDABAD..382345</span>
                                 </div>
 
-                                <div class="r-line-grid-3">
+                                <div class="r-line-grid-3 r-line-donor-contact">
                                     <div class="col-tel"><span class="r-lbl">Tel. No.:</span> <span class="u-val-flex" id="rPrintTel">9099827434</span></div>
-                                    <div class="col-email"><span class="r-lbl">Email:</span> <span class="u-val-flex" id="rPrintEmail">divya_abdin@yahoo.co.in</span></div>
+                                    <div class="col-email"><span class="r-lbl">Email:</span> <span class="u-val-flex u-val-email" id="rPrintEmail">divya_abdin@yahoo.co.in</span></div>
                                     <div class="col-pan"><span class="r-lbl">Donor`s PAN:</span> <span class="u-val-flex" id="rPrintPan">ARYPP3355J</span></div>
                                 </div>
 
@@ -775,7 +775,9 @@
                                     </div>
                                     <div class="r-verif-sign-col">
                                         <span class="r-lbl-sign">Signature:</span>
-                                        <span class="u-val-sign-space"></span>
+                                        <div class="u-val-sign-space">
+                                            <img id="rPrintStampImg" src="../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790054531226.png" alt="Kalyan Foundation Official Seal & Signature" class="r-stamp-img">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -818,31 +820,28 @@
                     </button>
                     <button type="button" id="sendWhatsAppReceiptBtn" class="btn-action-secondary-wa">
                         <i class="fab fa-whatsapp"></i>
-                        <span data-i18n="sendWhatsappBtn">WhatsApp</span>
+                        <span data-i18n="sendWhatsAppBtn">Send via WhatsApp</span>
                     </button>
+                </div>
+                <div class="actions-split-grid">
                     <button type="button" id="sendEmailReceiptBtn" class="btn-action-secondary-email">
-                        <i class="fas fa-envelope"></i>
-                        <span data-i18n="sendEmailBtn">Send Email</span>
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="sendEmailBtn">Send to Donor Email</span>
                     </button>
                     <button type="button" id="printReceiptDirectBtn" class="btn-action-secondary-print">
                         <i class="fas fa-print"></i>
-                        <span data-i18n="printReceiptBtn">Print</span>
+                        <span data-i18n="printDirectBtn">Print Receipt</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Hidden FormSubmit background email dispatcher (Works seamlessly on file://, localhost & live web) -->
-    <iframe name="hiddenEmailIframe" id="hiddenEmailIframe" style="display:none; width:0; height:0; border:0;"></iframe>
-    <form id="hiddenEmailForm" action="https://formsubmit.co/kalyanfoundation039@gmail.com" method="POST" target="hiddenEmailIframe" style="display:none;">
-        <input type="hidden" name="_subject" id="fs_subject" value="Official 80G Donation Receipt - Kalyan Foundation">
+    <!-- Hidden Form for EmailJS / FormSubmit / PDF Delivery -->
+    <form id="hiddenFormSubmitEmail" action="https://formsubmit.co/kalyanfoundation039@gmail.com" method="POST" target="_blank" style="display:none;">
+        <input type="hidden" name="_subject" id="fsSubject" value="New 80G Donation Receipt - Kalyan Foundation">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="email" id="fs_donor_email" value="">
-        <input type="hidden" name="name" id="fs_donor_name" value="">
-        <input type="hidden" name="_autoresponse" id="fs_autoresponse" value="">
-        <input type="hidden" name="_cc" id="fs_cc" value="">
         <input type="hidden" name="_replyto" id="fs_replyto" value="kalyanfoundation039@gmail.com">
         <input type="hidden" name="Donor_Name" id="fs_name" value="">
         <input type="hidden" name="Donor_Email" id="fs_email" value="">
@@ -872,6 +871,7 @@
     <script src="js/translations.js"></script>
     <script src="js/qrcode.min.js"></script>
     <script src="js/logo-data.js"></script>
+    <script src="js/stamp-data.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <!-- Curved Path for KALYAN FOUNDATION text -->
+    <path id="kalyanTextPath" d="M 68,250 A 182,182 0 1,1 432,250" fill="none" />
+  </defs>
+
+  <style>
+    .stamp-blue { fill: #0022cc; }
+    .stamp-stroke-thick { stroke: #0022cc; stroke-width: 8; fill: none; }
+    .stamp-stroke-thin { stroke: #0022cc; stroke-width: 2.5; fill: none; }
+    .stamp-stroke-inner { stroke: #0022cc; stroke-width: 4; fill: none; }
+    .stamp-header-text {
+      font-family: 'Plus Jakarta Sans', 'Arial Black', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 34px;
+      letter-spacing: 4px;
+      fill: #0022cc;
+    }
+    .stamp-reg-text {
+      font-family: 'Plus Jakarta Sans', 'Arial Black', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 21px;
+      letter-spacing: 1.5px;
+      fill: #0022cc;
+      text-anchor: middle;
+    }
+    .stamp-reg-no {
+      font-family: 'Plus Jakarta Sans', 'Arial Black', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 19px;
+      letter-spacing: 1px;
+      fill: #0022cc;
+      text-anchor: middle;
+    }
+    .stamp-sig {
+      font-family: 'Brush Script MT', 'Dancing Script', 'Segoe Script', 'Great Vibes', 'Allura', 'Caveat', cursive;
+      font-size: 68px;
+      font-weight: 400;
+      fill: #0022cc;
+      text-anchor: middle;
+    }
+    .sig-line {
+      stroke: #0022cc;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      fill: none;
+    }
+  </style>
+
+  <!-- Outer Thick Border -->
+  <circle cx="250" cy="250" r="236" class="stamp-stroke-thick" />
+  
+  <!-- Middle Thin Border -->
+  <circle cx="250" cy="250" r="222" class="stamp-stroke-thin" />
+  
+  <!-- Inner Circular Border -->
+  <circle cx="250" cy="250" r="142" class="stamp-stroke-inner" />
+
+  <!-- Top Curved Text: KALYAN FOUNDATION -->
+  <text class="stamp-header-text">
+    <textPath href="#kalyanTextPath" startOffset="50%" text-anchor="middle">KALYAN FOUNDATION</textPath>
+  </text>
+
+  <!-- Star 1 (Lower Left - approx 145 deg) -->
+  <!-- Center: 250 - 182*cos(35) = 101, 250 + 182*sin(35) = 354 -->
+  <polygon class="stamp-blue" points="
+    101,338 105,349 116,349 107,356 111,367 101,360 91,367 95,356 86,349 97,349" />
+
+  <!-- Star 2 (Lower Right - approx 35 deg) -->
+  <!-- Center: 250 + 182*cos(35) = 399, 250 + 182*sin(35) = 354 -->
+  <polygon class="stamp-blue" points="
+    399,338 403,349 414,349 405,356 409,367 399,360 389,367 393,356 384,349 395,349" />
+
+  <!-- Star 3 (Bottom Center - 90 deg) -->
+  <!-- Center: 250, 250 + 182 = 432 -->
+  <polygon class="stamp-blue" points="
+    250,416 254,427 265,427 256,434 260,445 250,438 240,445 244,434 235,427 246,427" />
+
+  <!-- Signature Element: Jigs Bhatt -->
+  <g transform="translate(0, 0)">
+    <!-- Vector Calligraphy Path for signature flourish matching original exactly -->
+    <path d="M 115,250 C 130,240 170,185 195,175 C 205,170 200,195 185,230 C 175,252 165,260 172,258 C 185,254 195,215 208,205 C 215,198 220,208 218,225 C 225,205 238,200 240,215 C 242,230 235,248 245,235 C 255,220 260,208 270,172 C 275,155 285,170 282,190 C 295,175 308,185 300,205 C 310,190 322,192 320,210 C 330,195 342,190 345,212 C 352,190 365,185 368,210" 
+          stroke="#0022cc" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    
+    <!-- Signature text overlay for crisp typography -->
+    <text x="245" y="232" class="stamp-sig" font-style="italic">Jigs Bhatt</text>
+    
+    <!-- Signature underline flourish -->
+    <path d="M 168,258 Q 260,245 366,238" class="sig-line" stroke-width="3" />
+  </g>
+
+  <!-- Bottom Details inside Inner Circle -->
+  <!-- REG.NO: -->
+  <text x="250" y="320" class="stamp-reg-text">REG.NO:</text>
+  <!-- GUJ/20311/AHEMDABAD -->
+  <text x="250" y="346" class="stamp-reg-no">GUJ/20311/AHEMDABAD</text>
+</svg>

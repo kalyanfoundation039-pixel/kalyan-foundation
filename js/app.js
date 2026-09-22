@@ -682,6 +682,11 @@ document.addEventListener('DOMContentLoaded', () => {
             modalAmtInput.value = selectedAmount || 1000;
         }
 
+        const stampImg = document.getElementById('rPrintStampImg');
+        if (stampImg && !stampImg.src) {
+            stampImg.src = window.KALYAN_STAMP_ORIGINAL_SRC || "../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790054531226.png";
+        }
+
         updateReceiptPreview();
         validateDonorForm(false);
     }
@@ -722,7 +727,19 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('rPrintName', donorName);
         setText('rPrintAddress', donorAddress);
         setText('rPrintTel', donorPhone);
-        setText('rPrintEmail', donorEmail);
+        
+        const emailEl = document.getElementById('rPrintEmail');
+        if (emailEl) {
+            emailEl.textContent = donorEmail;
+            if (donorEmail.length > 28) {
+                emailEl.style.fontSize = '0.64rem';
+            } else if (donorEmail.length > 22) {
+                emailEl.style.fontSize = '0.70rem';
+            } else {
+                emailEl.style.fontSize = '';
+            }
+        }
+
         setText('rPrintPan', donorPan);
         setText('rPrintAadhaar', donorAadhaar);
         setText('rPrintWords', amountWords);
@@ -733,6 +750,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('rPrintPaymentDetails', donorUtr);
         setText('rPrintAmountNum', `${amountNum}/-`);
         setText('rPrintVerifDate', formattedDate);
+
+        const stampImg = document.getElementById('rPrintStampImg');
+        if (stampImg && !stampImg.src) {
+            stampImg.src = window.KALYAN_STAMP_ORIGINAL_SRC || "../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790054531226.png";
+        }
     }
 
     function setText(id, text) {
@@ -858,9 +880,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     onclone: (clonedDoc) => {
                         const clonedLogo = clonedDoc.getElementById('rPrintLogoImg');
                         if (clonedLogo) {
+                            if (window.KALYAN_LOGO_BASE64) {
+                                clonedLogo.src = window.KALYAN_LOGO_BASE64;
+                            }
                             clonedLogo.style.display = 'block';
                             clonedLogo.style.visibility = 'visible';
                             clonedLogo.style.opacity = '1';
+                        }
+                        const clonedStamp = clonedDoc.getElementById('rPrintStampImg');
+                        if (clonedStamp) {
+                            if (window.KALYAN_STAMP_BASE64) {
+                                clonedStamp.src = window.KALYAN_STAMP_BASE64;
+                            }
+                            clonedStamp.style.display = 'block';
+                            clonedStamp.style.visibility = 'visible';
+                            clonedStamp.style.opacity = '1';
                         }
                     }
                 });

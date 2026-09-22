@@ -1167,12 +1167,15 @@ body {
   border-radius: var(--radius-full);
   letter-spacing: 0.3px;
   box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .dev-credit:hover {
   border-color: var(--primary);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 101, 52, 0.15);
 }
 
 .dev-credit span {
@@ -1915,9 +1918,14 @@ body {
 
 .r-line-grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 6px 12px;
   align-items: baseline;
+}
+
+.r-line-donor-contact {
+  grid-template-columns: 135px 1fr 145px !important;
+  gap: 6px 10px;
 }
 
 .r-line-grid-2 {
@@ -1930,24 +1938,36 @@ body {
 .col-tel, .col-email, .col-pan, .col-aadhaar, .col-words, .col-account, .col-for, .col-by, .col-paydate, .col-paydetails {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .u-val-flex {
-  flex: 1 1 80px;
-  min-width: 60px;
+  flex: 1 1 auto;
+  min-width: 0;
   border-bottom: 1.5px solid #000000;
   font-weight: 700;
   padding: 0 4px;
   color: #000000;
-  word-break: break-word;
-  font-size: clamp(0.72rem, 1.5vw, 0.80rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.70rem, 1.4vw, 0.78rem);
 }
 
-.col-email .u-val-flex {
-  word-break: break-all;
+.col-email .u-val-flex,
+.u-val-email {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.74rem;
+  letter-spacing: -0.15px;
 }
 
 .col-words .u-val-flex {
@@ -2004,14 +2024,14 @@ body {
   font-size: clamp(0.65rem, 1.3vw, 0.70rem);
   line-height: 1.45;
   text-align: justify;
-  margin-bottom: 4px;
+  margin-bottom: 14px;
   color: #000000;
 }
 
 .r-verif-sign-grid {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -2019,26 +2039,45 @@ body {
 .r-verif-date-col {
   font-size: clamp(0.72rem, 1.5vw, 0.80rem);
   color: #000000;
+  padding-bottom: 2px;
 }
 
 .r-verif-sign-col {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
+  position: relative;
 }
 
 .r-lbl-sign {
   font-weight: 800;
   font-size: clamp(0.72rem, 1.5vw, 0.80rem);
   color: #000000;
+  padding-bottom: 2px;
 }
 
 .u-val-sign-space {
-  display: inline-block;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
   width: 140px;
+  height: 48px;
   border-bottom: 1.5px solid #000000;
-  min-height: 24px;
   margin-left: 6px;
+}
+
+.r-stamp-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: multiply;
 }
 
 /* Statutory Exemption Footer */
@@ -2288,6 +2327,15 @@ body {
     height: 56px !important;
     border-radius: 50% !important;
     border: 1.5px solid #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .r-stamp-img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 72px !important;
+    height: 72px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
