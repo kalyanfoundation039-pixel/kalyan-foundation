@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stampImg && window.KALYAN_STAMP_BASE64) {
             stampImg.src = window.KALYAN_STAMP_BASE64;
         } else if (stampImg && !stampImg.src) {
-            stampImg.src = "assets/stamp.svg";
+            stampImg.src = "assets/stamp.png";
         }
 
         updateReceiptPreview();
@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stampImg && window.KALYAN_STAMP_BASE64) {
             stampImg.src = window.KALYAN_STAMP_BASE64;
         } else if (stampImg && !stampImg.src) {
-            stampImg.src = "assets/stamp.svg";
+            stampImg.src = "assets/stamp.png";
         }
     }
 

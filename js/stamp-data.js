@@ -1,93 +1,52 @@
-// Kalyan Foundation Official Stamp & Signature (Self-contained Vector Data URI)
+// Kalyan Foundation Official Stamp & Signature (Exact Uploaded Image Loader)
 (function() {
-    const stampSvgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
-  <defs>
-    <path id="kalyanTopArc" d="M 66,250 A 184,184 0 1,1 434,250" fill="none" />
-  </defs>
+    const localBrainPath = "../../brain/18737bd1-584b-4b44-a34d-2f4450caed8f/.user_uploaded/media_1790056900727.png";
+    const serverPath = "assets/stamp.png";
 
-  <style>
-    .stamp-blue { fill: #0022cc; }
-    .stamp-stroke-outer { stroke: #0022cc; stroke-width: 8.5; fill: none; }
-    .stamp-stroke-mid { stroke: #0022cc; stroke-width: 2.8; fill: none; }
-    .stamp-stroke-inner { stroke: #0022cc; stroke-width: 4.2; fill: none; }
-    .stamp-title-text {
-      font-family: Arial, 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
-      font-weight: 900;
-      font-size: 34px;
-      letter-spacing: 4.2px;
-      fill: #0022cc;
-    }
-    .stamp-reg-label {
-      font-family: Arial, 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing: 1.5px;
-      fill: #0022cc;
-      text-anchor: middle;
-    }
-    .stamp-reg-num {
-      font-family: Arial, 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
-      font-weight: 900;
-      font-size: 20px;
-      letter-spacing: 1px;
-      fill: #0022cc;
-      text-anchor: middle;
-    }
-  </style>
-
-  <!-- Outer Double Circle -->
-  <circle cx="250" cy="250" r="236" class="stamp-stroke-outer" />
-  <circle cx="250" cy="250" r="222" class="stamp-stroke-mid" />
-  
-  <!-- Inner Circle Border -->
-  <circle cx="250" cy="250" r="142" class="stamp-stroke-inner" />
-
-  <!-- Top Curved Text: KALYAN FOUNDATION -->
-  <text class="stamp-title-text">
-    <textPath href="#kalyanTopArc" startOffset="50%" text-anchor="middle">KALYAN FOUNDATION</textPath>
-  </text>
-
-  <!-- Left Star (~205 deg) -->
-  <polygon class="stamp-blue" points="101,338 105,349 116,349 107,356 111,367 101,360 91,367 95,356 86,349 97,349" />
-
-  <!-- Right Star (~335 deg) -->
-  <polygon class="stamp-blue" points="399,338 403,349 414,349 405,356 409,367 399,360 389,367 393,356 384,349 395,349" />
-
-  <!-- Bottom Star (270 deg) -->
-  <polygon class="stamp-blue" points="250,416 254,427 265,427 256,434 260,445 250,438 240,445 244,434 235,427 246,427" />
-
-  <!-- Center Signature: Jigs Bhatt (Handcrafted Vector Signature Path) -->
-  <g id="jigsBhattSignature" stroke="#0022cc" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 115,254 C 130,240 160,192 184,176 C 196,168 202,180 188,212 C 178,236 166,260 176,256 C 186,252 195,218 205,204" stroke-width="4.2" />
-    <path d="M 205,204 C 210,214 212,224 218,225" stroke-width="4.0" />
-    <circle cx="214" cy="192" r="3.2" fill="#0022cc" stroke="none" />
-    <path d="M 230,205 C 220,205 218,218 226,224 C 234,228 238,215 238,206 L 236,242 C 235,254 226,258 220,252" stroke-width="4.0" />
-    <path d="M 236,220 C 242,210 252,210 248,222 C 245,230 238,232 250,228" stroke-width="4.0" />
-    <path d="M 268,172 L 264,236 M 266,174 C 286,170 294,188 280,198 C 296,200 300,226 270,234" stroke-width="4.2" />
-    <path d="M 292,170 L 290,230 M 290,208 C 298,198 310,198 312,212 L 312,230" stroke-width="4.0" />
-    <path d="M 328,210 C 318,210 318,224 326,228 C 332,230 334,220 334,210 L 334,230" stroke-width="4.0" />
-    <path d="M 344,182 L 344,230 C 344,232 350,232 356,228 M 360,182 L 360,230 C 360,232 366,232 372,226" stroke-width="4.0" />
-    <path d="M 336,198 L 376,196" stroke-width="3.6" />
-    <path d="M 168,258 Q 268,242 368,236" stroke-width="3.2" />
-  </g>
-
-  <!-- Bottom Details inside Inner Circle -->
-  <text x="250" y="320" class="stamp-reg-label">REG.NO:</text>
-  <text x="250" y="346" class="stamp-reg-num">GUJ/20311/AHEMDABAD</text>
-</svg>`;
-
-    window.KALYAN_STAMP_BASE64 = "data:image/svg+xml;utf8," + encodeURIComponent(stampSvgString);
-
-    function applyStamp() {
+    function loadExactStamp() {
         const stampImg = document.getElementById('rPrintStampImg');
-        if (stampImg) {
-            stampImg.src = window.KALYAN_STAMP_BASE64;
+
+        // If Base64 is already cached in memory
+        if (window.KALYAN_STAMP_BASE64) {
+            if (stampImg) stampImg.src = window.KALYAN_STAMP_BASE64;
+            return;
         }
+
+        // Load exact image and auto-convert to in-memory Base64 for 100% reliability & PDF generation
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function() {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || 400;
+                canvas.height = img.naturalHeight || 400;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                const b64 = canvas.toDataURL('image/png');
+                window.KALYAN_STAMP_BASE64 = b64;
+                if (stampImg) {
+                    stampImg.src = b64;
+                }
+            } catch(e) {
+                if (stampImg) stampImg.src = img.src;
+            }
+        };
+
+        img.onerror = function() {
+            // When hosted on live server (kalyanfoundation.in), load assets/stamp.png
+            if (stampImg) {
+                stampImg.src = serverPath;
+            }
+        };
+
+        img.src = localBrainPath;
     }
+
+    window.initOfficialStamp = loadExactStamp;
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyStamp);
+        document.addEventListener('DOMContentLoaded', loadExactStamp);
     } else {
-        applyStamp();
+        loadExactStamp();
     }
 })();
